@@ -19,6 +19,7 @@
 		CE092BC421311F6100E9FF26 /* 泡沫-邓紫棋.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE092BC321311F6100E9FF26 /* 泡沫-邓紫棋.jpg */; };
 		CE092BC721311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CE092BC621311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 */; };
 		CE092BCA21311FEB00E9FF26 /* 泡沫-邓紫棋.lrc in Resources */ = {isa = PBXBuildFile; fileRef = CE092BC921311FEB00E9FF26 /* 泡沫-邓紫棋.lrc */; };
+		CE092BD421326F1400E9FF26 /* playerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BD321326F1400E9FF26 /* playerManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,8 @@
 		CE092BC321311F6100E9FF26 /* 泡沫-邓紫棋.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "泡沫-邓紫棋.jpg"; sourceTree = "<group>"; };
 		CE092BC621311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "泡沫-邓紫棋.mp3"; sourceTree = "<group>"; };
 		CE092BC921311FEB00E9FF26 /* 泡沫-邓紫棋.lrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "泡沫-邓紫棋.lrc"; sourceTree = "<group>"; };
+		CE092BD221326F1400E9FF26 /* playerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = playerManager.h; sourceTree = "<group>"; };
+		CE092BD321326F1400E9FF26 /* playerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = playerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +113,7 @@
 		CE092B8B212E5E0700E9FF26 /* musicPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				CE092BCE213258CB00E9FF26 /* musicManager */,
 				CE092B8C212E5E0700E9FF26 /* AppDelegate.h */,
 				CE092B8D212E5E0700E9FF26 /* AppDelegate.m */,
 				CE092B8F212E5E0700E9FF26 /* PlayerViewController.h */,
@@ -174,6 +178,15 @@
 				CE092BC921311FEB00E9FF26 /* 泡沫-邓紫棋.lrc */,
 			);
 			path = LRCs;
+			sourceTree = "<group>";
+		};
+		CE092BCE213258CB00E9FF26 /* musicManager */ = {
+			isa = PBXGroup;
+			children = (
+				CE092BD221326F1400E9FF26 /* playerManager.h */,
+				CE092BD321326F1400E9FF26 /* playerManager.m */,
+			);
+			path = musicManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,6 +325,7 @@
 				CE092B97212E5E0700E9FF26 /* musicPlayer.xcdatamodeld in Sources */,
 				CE092B91212E5E0700E9FF26 /* PlayerViewController.m in Sources */,
 				CE092B9F212E5E0800E9FF26 /* main.m in Sources */,
+				CE092BD421326F1400E9FF26 /* playerManager.m in Sources */,
 				CE092B8E212E5E0700E9FF26 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

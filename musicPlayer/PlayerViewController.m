@@ -7,6 +7,8 @@
 //
 
 #import "PlayerViewController.h"
+#import <AVFoundation/AVFoundation.h>
+#import "playerManager.h"
 
 @interface PlayerViewController ()
 // back ground image
@@ -33,22 +35,45 @@
 @property (weak, nonatomic) IBOutlet UILabel *totalTime;
 
 // player model
-
+@property (strong, nonatomic) playerManager *playerManager;
 
 @end
 
 @implementation PlayerViewController
+@synthesize playerManager = _playerManager;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    [self prepareToPlay];
+    [[self songSlider] setThumbImage:[UIImage imageNamed:@"sliderButton"] forState:UIControlStateNormal];
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+// set up to play
+- (void) prepareToPlay {
+    _playerManager = [playerManager musicManager];
+}
+
+// play the song
+- (IBAction)play:(UIButton *)sender {
+    if (_playerManager) {
+        if ([_playerManager play:@"泡沫-邓紫棋"]) [sender setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+        else [sender  setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    }
+}
+
+// handle after finishing the song
+-(void) didFinishPlaying {
+    [_playerManager didfinishPlaying];
+    [[self playButton] setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+}
+
 
 
 @end

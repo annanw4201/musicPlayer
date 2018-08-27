@@ -89,6 +89,9 @@
                                             <constraint firstAttribute="width" constant="64" id="hi8-MT-AzA"/>
                                         </constraints>
                                         <state key="normal" title="Button" image="play"/>
+                                        <connections>
+                                            <action selector="play:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dQT-GC-hZH"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EzH-yP-Vfu" userLabel="NextSong">
                                         <rect key="frame" x="249" y="45" width="64" height="64"/>
@@ -168,18 +171,17 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="LRCLabel" destination="LsU-SF-QVy" id="EUB-AN-ERM"/>
-                        <outlet property="authorLabel" destination="DSb-1q-0kG" id="jHS-Oy-Uhr"/>
-                        <outlet property="backGroundImageView" destination="oni-Xo-evz" id="Nnv-t4-Iva"/>
-                        <outlet property="currentTime" destination="P6U-I5-Cg8" id="goI-om-fcl"/>
-                        <outlet property="lastSong" destination="Y89-7C-whu" id="uS2-NX-9lX"/>
-                        <outlet property="nextSongButton" destination="EzH-yP-Vfu" id="FXq-7m-zQM"/>
-                        <outlet property="playButton" destination="9bI-0a-11u" id="xH9-AF-Jyd"/>
-                        <outlet property="singerImgView" destination="y7a-qE-qPP" id="m8g-Om-cyU"/>
-                        <outlet property="songSlider" destination="5oT-D5-ct0" id="jqZ-Mb-i6f"/>
-                        <outlet property="title" destination="edj-PO-qM0" id="8Ai-KY-J9u"/>
-                        <outlet property="titleLabel" destination="edj-PO-qM0" id="m05-ot-TKm"/>
-                        <outlet property="totalTime" destination="Amx-Pc-bJ9" id="iiI-5u-bqc"/>
+                        <outlet property="LRCLabel" destination="LsU-SF-QVy" id="d2m-dc-H47"/>
+                        <outlet property="authorLabel" destination="DSb-1q-0kG" id="D3M-Bf-9Na"/>
+                        <outlet property="backGroundImageView" destination="oni-Xo-evz" id="oSs-g9-PIz"/>
+                        <outlet property="currentTime" destination="P6U-I5-Cg8" id="eVL-MW-8Gx"/>
+                        <outlet property="lastSongButton" destination="Y89-7C-whu" id="yvb-6K-MCw"/>
+                        <outlet property="nextSongButton" destination="EzH-yP-Vfu" id="RJ0-FD-fn1"/>
+                        <outlet property="playButton" destination="9bI-0a-11u" id="lVx-k7-wJI"/>
+                        <outlet property="singerImageView" destination="y7a-qE-qPP" id="jGD-KM-mY3"/>
+                        <outlet property="songSlider" destination="5oT-D5-ct0" id="DMp-Um-Ygl"/>
+                        <outlet property="titleLabel" destination="edj-PO-qM0" id="hlV-XW-hem"/>
+                        <outlet property="totalTime" destination="Amx-Pc-bJ9" id="7AK-3l-IFV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
