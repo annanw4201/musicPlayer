@@ -19,5 +19,7 @@
 - (void) pause;
 - (AVPlayerItem *) currentPlayerItem;
 - (void) didfinishPlaying;
+- (AVPlayer *) currentPlayer;
+- (void) loadMusic:(NSString *)fileName;
 @end
 

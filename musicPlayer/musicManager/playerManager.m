@@ -23,15 +23,27 @@ static playerManager *_musicManager = nil;
 
 // get manager instance
 + (playerManager *)musicManager {
-    @synchronized( [playerManager class] ) {
         if (!_musicManager) {
             _musicManager = [[self alloc] init];
             return _musicManager;
         }
-    }
+    
     return nil;
 }
 
+// load the song
+- (void) loadMusic:(NSString *)fileName {
+    NSLog(@"manager play -- name: \"%@\"!", fileName);
+    NSURL *url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
+    NSLog(@"url is %@", url);
+    if (url) {
+        _playerItem = [[AVPlayerItem alloc] initWithURL:url];
+        _player = [[AVPlayer alloc] initWithPlayerItem:_playerItem];
+        NSLog(@"load music");
+    }
+}
+
+// Play the song
 - (Boolean) play:(NSString *)fileName {
     if (_player != NULL) {
         if ([_player rate] == 0) {
@@ -43,31 +55,28 @@ static playerManager *_musicManager = nil;
             return NO;
         }
     }
-    else {
-        NSLog(@"manager play -- name: \"%@\"!", fileName);
-        NSURL *url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
-        NSLog(@"url is %@", url);
-        if (url) {
-            _playerItem = [[AVPlayerItem alloc] initWithURL:url];
-            _player = [[AVPlayer alloc] initWithPlayerItem:_playerItem];
-            [[self player] play];
-            return YES;
-        }
-        return NO;
-    }
+    return NO;
 }
 
+// pause the song
 - (void) pause {
     [_player pause];
 }
 
+// get current playing playerItem
 - (AVPlayerItem *) currentPlayerItem {
     return [self playerItem];
 }
 
+// handle after finishing the song
 - (void) didfinishPlaying {
     _playerItem = nil;
     _player = nil;
+}
+
+// get current playing player
+- (AVPlayer *) currentPlayer {
+    return [self player];
 }
 
 @end
