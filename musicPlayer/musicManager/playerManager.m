@@ -55,6 +55,11 @@ static playerManager *_musicManager = nil;
             return NO;
         }
     }
+    else {
+        [self loadMusic:fileName];
+        [_player play];
+        return YES;
+    }
     return NO;
 }
 

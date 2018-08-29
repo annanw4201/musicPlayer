@@ -49,10 +49,8 @@
     [[self songSlider] setThumbImage:[UIImage imageNamed:@"sliderButton"] forState:UIControlStateNormal];
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
     
-    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(songSliderTapped:)];
-    [longPressRecognizer setMinimumPressDuration:0];
-    
-    //[[self songSlider] addGestureRecognizer:longPressRecognizer];
+    [[self songSlider] addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(songSliderTapped:)]];
+    [[self songSlider] addTarget:self action:@selector(sliderEndDragging) forControlEvents:UIControlEventTouchUpOutside];
     [[self songSlider] addTarget:self action:@selector(sliderEndDragging) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -87,6 +85,7 @@
 // play the song
 - (IBAction)play:(UIButton *)sender {
     if (_playerManager) {
+        NSLog(@"player ready");
         if ([_playerManager play:@"泡沫-邓紫棋"]) [sender setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         else [sender  setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
@@ -101,21 +100,26 @@
     [[[self playerManager] currentPlayer] seekToTime:CMTimeMake(newTime, 1)];
 }
 
-#pragma slider
 // handle after finishing the song
 -(void) didFinishPlaying {
     [_playerManager didfinishPlaying];
     [[self playButton] setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
 }
 
+#pragma slider
 // handle song slider tapped
 - (void) songSliderTapped: (UIGestureRecognizer *)sender {
-    CGPoint tappedPoint = [sender locationInView:[sender view]];
-    CGFloat sliderValue = tappedPoint.x / [[self songSlider] frame].size.width;
-    [[self songSlider] setValue:sliderValue];
-    [self updateProgress];
-    NSLog(@"slider tapped value: %f", sliderValue);
-    
+    if ([[self songSlider] isHighlighted]) {
+        [self sliderEndDragging];
+        NSLog(@"tap do slide");
+    }
+    else {
+        CGPoint tappedPoint = [sender locationInView:[sender view]];
+        CGFloat sliderValue = tappedPoint.x / [[self songSlider] frame].size.width;
+        [[self songSlider] setValue:sliderValue];
+        [self updateProgress];
+        NSLog(@"slider tapped value: %f", sliderValue);
+    }
 }
 
 // handle slider pan gesture
@@ -128,6 +132,7 @@
 
 // handle when end dragging song slider
 - (void)sliderEndDragging {
+    NSLog(@"end dragging");
     [self updateProgress];
 }
 
