@@ -45,7 +45,8 @@ static playerManager *_musicManager = nil;
 
 // Play the song
 - (Boolean) play:(NSString *)fileName {
-    if (_player != NULL) {
+    if (_player) {
+        NSLog(@"player is not null");
         if ([_player rate] == 0) {
             [[self player] play];
             return YES;
@@ -60,7 +61,6 @@ static playerManager *_musicManager = nil;
         [_player play];
         return YES;
     }
-    return NO;
 }
 
 // pause the song

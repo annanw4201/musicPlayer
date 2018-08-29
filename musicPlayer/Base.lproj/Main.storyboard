@@ -100,6 +100,9 @@
                                             <constraint firstAttribute="height" constant="64" id="m3i-jV-3T4"/>
                                         </constraints>
                                         <state key="normal" title="Button" image="next"/>
+                                        <connections>
+                                            <action selector="nextSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="C1J-Mv-pfJ"/>
+                                        </connections>
                                     </button>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="5oT-D5-ct0" userLabel="songProgress">
                                         <rect key="frame" x="41" y="20" width="293" height="11"/>
