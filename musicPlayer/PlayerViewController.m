@@ -20,8 +20,8 @@
 // music title name label
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
-// singer image view
-@property (weak, nonatomic) IBOutlet UIImageView *singerImageView;
+// song image view
+@property (strong, nonatomic) IBOutlet UIImageView *songImageView;
 
 // LRC label
 @property (weak, nonatomic) IBOutlet UILabel *LRCLabel;
@@ -45,19 +45,39 @@
 @synthesize playerManager = _playerManager;
 
 - (void)viewDidLoad {
+    NSLog(@"view did load");
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self prepareToPlay];
     
     // song slider setup
-    [[self songSlider] setThumbImage:[UIImage imageNamed:@"sliderButton"] forState:UIControlStateNormal];
-    [[self songSlider] addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(songSliderTapped:)]];
-    [[self songSlider] addTarget:self action:@selector(sliderEndDragging) forControlEvents:UIControlEventTouchUpOutside];
-    [[self songSlider] addTarget:self action:@selector(sliderEndDragging) forControlEvents:UIControlEventTouchUpInside];
+    [self songSliderSetup];
+    
+    // prepare for playing the song
+    [self prepareToPlay];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"view did appear");
     [super viewDidAppear:animated];
+    // song image view setup
+    [self songImageViewSetup];
+}
+
+- (void)viewWillLayoutSubviews {
+    //NSLog(@"view will layout subview");
+    [super viewWillLayoutSubviews];
+}
+
+- (void)awakeFromNib {
+    NSLog(@"awake from nib");
+    [super awakeFromNib];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -69,7 +89,7 @@
 - (NSString *)stringForTime:(Float64)time {
     NSInteger min = time / 60;
     NSInteger sec = round((int)time % 60);
-    NSLog(@"%02ld:%02ld", min, sec);
+    //NSLog(@"%02ld:%02ld", min, sec);
     return [NSString stringWithFormat:@"%02ld:%02ld", min, sec];
 }
 
@@ -82,6 +102,7 @@
     Float64 totalTime = CMTimeGetSeconds([[currentPlayerItem asset] duration]);
     [[self totalTimeLabel] setText:[self stringForTime:totalTime]];
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
+    [self addSongImageViewAnimate];
     [self play:[self playButton]];
 }
 
@@ -91,17 +112,20 @@
         if ([_playerManager play:@"泡沫-邓紫棋"]) {
             NSLog(@"To play");
             [self addSliderTimer];
+            [self resumeSongImageViewAnimate];
             [sender setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         }
         else {
             NSLog(@"To pause");
             [self removeSliderTimer];
+            [self pauseSongImageViewAnimate];
             [sender  setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         }
         
     }
 }
 
+// play next song
 - (IBAction)nextSong:(UIButton *)sender {
     [self prepareToPlay];
 }
@@ -117,6 +141,7 @@
 // handle after finishing the song
 -(void)didFinishPlaying {
     NSLog(@"finish playing");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
     [self removeSliderTimer];
     [_playerManager didfinishPlaying];
     [[self currentTimeLabel] setText:[self stringForTime:0.0]];
@@ -126,6 +151,14 @@
 }
 
 #pragma slider
+// setup slider
+- (void)songSliderSetup {
+    [[self songSlider] setThumbImage:[UIImage imageNamed:@"sliderButton"] forState:UIControlStateNormal];
+    [[self songSlider] addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(songSliderTapped:)]];
+    [[self songSlider] addTarget:self action:@selector(sliderEndDragging) forControlEvents:UIControlEventTouchUpOutside];
+    [[self songSlider] addTarget:self action:@selector(sliderEndDragging) forControlEvents:UIControlEventTouchUpInside];
+}
+
 // handle song slider tapped
 - (void)songSliderTapped: (UIGestureRecognizer *)sender {
     [self removeSliderTimer];
@@ -148,8 +181,8 @@
     [self removeSliderTimer];
     NSLog(@"sliderPan value: %f", [[self songSlider] value]);
     AVPlayerItem *currentPlayerItem = [[self playerManager] currentPlayerItem];
-    Float64 totalTime = CMTimeGetSeconds([currentPlayerItem duration]) * [[self songSlider] value];
-    [[self currentTimeLabel] setText:[self stringForTime:totalTime]];
+    Float64 currentTime = CMTimeGetSeconds([currentPlayerItem duration]) * [[self songSlider] value];
+    [[self currentTimeLabel] setText:[self stringForTime:currentTime]];
 }
 
 // handle when end dragging song slider
@@ -171,17 +204,64 @@
     }
 }
 
+// remove timer from the slider
 -(void) removeSliderTimer {
     NSLog(@"remove timer");
     [[self songSliderTimer] invalidate];
     self.songSliderTimer = nil;
 }
 
+// add timer to slider for updating progress
 -(void) addSliderTimer {
     [self removeSliderTimer];
     NSLog(@"add timer");
-    self.songSliderTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSliderProgress) userInfo:nil repeats:YES];
+    self.songSliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateSliderProgress) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop]addTimer:self.songSliderTimer forMode:NSRunLoopCommonModes];
 }
 
+#pragma songImage
+// setup songImageView
+- (void)songImageViewSetup {
+    [_songImageView setImage:[UIImage imageNamed:@"泡沫-邓紫棋.jpg"]];
+    [[self.songImageView layer] setCornerRadius:[self.songImageView bounds].size.height * 0.5];
+    [[self.songImageView layer] setMasksToBounds:YES];
+    
+    [[_songImageView layer] setBorderColor:[[UIColor grayColor] CGColor]];
+    [[_songImageView layer] setBorderWidth:5.0];
+}
+
+// add animation of the song image view
+- (void)addSongImageViewAnimate {
+    NSLog(@"add song imgView animate");
+    CABasicAnimation *rotateAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    [rotateAnimation setFromValue:[NSNumber numberWithFloat:0.0]];
+    [rotateAnimation setToValue:[NSNumber numberWithFloat:M_PI * 2]];
+    [rotateAnimation setDuration:30];
+    [rotateAnimation setRepeatCount:MAXFLOAT];
+    [[_songImageView layer] addAnimation:rotateAnimation forKey:nil];
+}
+
+// pause the song image view
+- (void)pauseSongImageViewAnimate {
+    NSLog(@"pause song imgView animate");
+    CFTimeInterval timeOffset = [[_songImageView layer] convertTime:CACurrentMediaTime() fromLayer:nil];
+    [[_songImageView layer] setSpeed:0.0];
+    [[_songImageView layer] setTimeOffset:timeOffset];
+}
+
+// resume the song image view
+- (void)resumeSongImageViewAnimate {
+    NSLog(@"resume song imgView animate");
+    
+    CFTimeInterval timeAtPause = [[_songImageView layer] timeOffset];
+    [[_songImageView layer] setSpeed:1.0];
+    [[_songImageView layer] setTimeOffset:0.0];
+    [[_songImageView layer] setBeginTime:0.0];
+    CFTimeInterval currentTime = [[_songImageView layer] convertTime:CACurrentMediaTime() fromLayer:nil];
+    CFTimeInterval timeSincePause = currentTime - timeAtPause;
+    
+    [[_songImageView layer] setBeginTime:timeSincePause];
+    
+    
+}
 @end

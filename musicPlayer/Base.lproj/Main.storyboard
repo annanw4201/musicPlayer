@@ -104,7 +104,7 @@
                                             <action selector="nextSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="C1J-Mv-pfJ"/>
                                         </connections>
                                     </button>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="5oT-D5-ct0" userLabel="songProgress">
+                                    <slider opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="5oT-D5-ct0" userLabel="songProgress">
                                         <rect key="frame" x="41" y="20" width="293" height="11"/>
                                         <color key="minimumTrackTintColor" red="0.38462745371917995" green="1" blue="0.20760643892545283" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -184,7 +184,7 @@
                         <outlet property="lastSongButton" destination="Y89-7C-whu" id="yvb-6K-MCw"/>
                         <outlet property="nextSongButton" destination="EzH-yP-Vfu" id="RJ0-FD-fn1"/>
                         <outlet property="playButton" destination="9bI-0a-11u" id="lVx-k7-wJI"/>
-                        <outlet property="singerImageView" destination="y7a-qE-qPP" id="jGD-KM-mY3"/>
+                        <outlet property="songImageView" destination="y7a-qE-qPP" id="ymg-DB-rOd"/>
                         <outlet property="songSlider" destination="5oT-D5-ct0" id="DMp-Um-Ygl"/>
                         <outlet property="titleLabel" destination="edj-PO-qM0" id="hlV-XW-hem"/>
                         <outlet property="totalTimeLabel" destination="Amx-Pc-bJ9" id="NUz-Rj-Gq4"/>

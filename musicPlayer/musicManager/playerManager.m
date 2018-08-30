@@ -35,7 +35,6 @@ static playerManager *_musicManager = nil;
 - (void) loadMusic:(NSString *)fileName {
     NSLog(@"manager play -- name: \"%@\"!", fileName);
     NSURL *url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
-    NSLog(@"url is %@", url);
     if (url) {
         _playerItem = [[AVPlayerItem alloc] initWithURL:url];
         _player = [[AVPlayer alloc] initWithPlayerItem:_playerItem];
@@ -46,7 +45,6 @@ static playerManager *_musicManager = nil;
 // Play the song
 - (Boolean) play:(NSString *)fileName {
     if (_player) {
-        NSLog(@"player is not null");
         if ([_player rate] == 0) {
             [[self player] play];
             return YES;
