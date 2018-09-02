@@ -9,22 +9,28 @@
 #import "PlayerViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "playerManager.h"
+#import "songModel.h"
+#import "lrcModel.h"
 
-@interface PlayerViewController ()
+@interface PlayerViewController () <UIScrollViewDelegate>
 // back ground image
 @property (weak, nonatomic) IBOutlet UIImageView *backGroundImageView;
 
 // author name label
-@property (weak, nonatomic) IBOutlet UILabel *authorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *singerLabel;
 
 // music title name label
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *songNameLabel;
 
 // song image view
 @property (strong, nonatomic) IBOutlet UIImageView *songImageView;
 
 // LRC label
 @property (weak, nonatomic) IBOutlet UILabel *LRCLabel;
+
+// lyric scroll view
+@property (weak, nonatomic) IBOutlet UIScrollView *lyricScrollView;
+
 
 // player control
 @property (weak, nonatomic) IBOutlet UIButton *lastSongButton;
@@ -36,9 +42,11 @@
 
 // player model
 @property (strong, nonatomic) playerManager *playerManager;
+@property (nonatomic, strong) lrcModel *currentLrcModel;
 
 // timer
 @property (strong, nonatomic) NSTimer *songSliderTimer;
+@property (nonatomic, strong) CADisplayLink *lrcLabelTimer;
 @end
 
 @implementation PlayerViewController
@@ -52,10 +60,13 @@
     // song slider setup
     [self songSliderSetup];
     
+    // lrc label setup
+    [self setupLrcLabel];
+    
     // prepare for playing the song
     [self prepareToPlay];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -96,7 +107,14 @@
 // set up to play
 - (void)prepareToPlay {
     if (!_playerManager) _playerManager = [playerManager musicManager];
-    [_playerManager loadMusic:@"泡沫-邓紫棋"];
+    songModel *songModel = [_playerManager loadMusic:@"泡沫-邓紫棋"];
+    [_singerLabel setText:songModel.singer];
+    [_songNameLabel setText:songModel.songName];
+    
+    _currentLrcModel = [[lrcModel alloc] init];
+    [_currentLrcModel lrcWithFile:@"泡沫-邓紫棋.lrc"];
+    
+    [self addLrcLabelTimer]; // add lrc timer to update LRC label
     
     AVPlayerItem *currentPlayerItem = [[self playerManager] currentPlayerItem];
     Float64 totalTime = CMTimeGetSeconds([[currentPlayerItem asset] duration]);
@@ -110,14 +128,16 @@
 - (IBAction)play:(UIButton *)sender {
     if (_playerManager) {
         if ([_playerManager play:@"泡沫-邓紫棋"]) {
-            NSLog(@"To play");
+            NSLog(@"TO PLAY");
             [self addSliderTimer];
+            [self addLrcLabelTimer];
             [self resumeSongImageViewAnimate];
             [sender setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         }
         else {
-            NSLog(@"To pause");
+            NSLog(@"TO PAUSE");
             [self removeSliderTimer];
+            [self removeLrcLabelTimer];
             [self pauseSongImageViewAnimate];
             [sender  setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         }
@@ -127,6 +147,11 @@
 
 // play next song
 - (IBAction)nextSong:(UIButton *)sender {
+    [self prepareToPlay];
+}
+
+// play last song
+- (IBAction)lastSong:(UIButton *)sender {
     [self prepareToPlay];
 }
 
@@ -143,6 +168,8 @@
     NSLog(@"finish playing");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
     [self removeSliderTimer];
+    [self removeLrcLabelTimer];
+    
     [_playerManager didfinishPlaying];
     [[self currentTimeLabel] setText:[self stringForTime:0.0]];
     [[self songSlider] setValue:0.0];
@@ -172,23 +199,24 @@
         CGFloat sliderValue = tappedPoint.x / [[self songSlider] frame].size.width;
         [[self songSlider] setValue:sliderValue];
         [self updateSongProgress];
-        NSLog(@"slider tapped value: %f", sliderValue);
     }
 }
 
 // handle slider pan gesture
 - (IBAction)sliderPan:(UISlider *)sender {
     [self removeSliderTimer];
-    NSLog(@"sliderPan value: %f", [[self songSlider] value]);
+    [self removeLrcLabelTimer];
     AVPlayerItem *currentPlayerItem = [[self playerManager] currentPlayerItem];
     Float64 currentTime = CMTimeGetSeconds([currentPlayerItem duration]) * [[self songSlider] value];
     [[self currentTimeLabel] setText:[self stringForTime:currentTime]];
+    [_LRCLabel setText:[_currentLrcModel lyricForTimeInSec:currentTime]];
 }
 
 // handle when end dragging song slider
 - (void)sliderEndDragging {
     NSLog(@"end dragging");
     [self addSliderTimer];
+    [self addLrcLabelTimer];
     [self updateSongProgress];
 }
 
@@ -206,7 +234,7 @@
 
 // remove timer from the slider
 -(void) removeSliderTimer {
-    NSLog(@"remove timer");
+    NSLog(@"remove slider timer");
     [[self songSliderTimer] invalidate];
     self.songSliderTimer = nil;
 }
@@ -214,7 +242,7 @@
 // add timer to slider for updating progress
 -(void) addSliderTimer {
     [self removeSliderTimer];
-    NSLog(@"add timer");
+    NSLog(@"add slider timer");
     self.songSliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateSliderProgress) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop]addTimer:self.songSliderTimer forMode:NSRunLoopCommonModes];
 }
@@ -261,7 +289,38 @@
     CFTimeInterval timeSincePause = currentTime - timeAtPause;
     
     [[_songImageView layer] setBeginTime:timeSincePause];
-    
+}
+
+#pragma lrcLabel
+- (void)setupLrcLabel {
+    [_LRCLabel setTextColor:[UIColor whiteColor]];
+}
+
+// add timer to update LRC label
+- (void)addLrcLabelTimer {
+    [self removeLrcLabelTimer];
+    NSLog(@"add lrc timer");
+    self.lrcLabelTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcLabel)];
+    [_lrcLabelTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+}
+
+// remove timer from LRC label
+- (void)removeLrcLabelTimer {
+    NSLog(@"remove lrc timer");
+    [self.lrcLabelTimer invalidate];
+    _lrcLabelTimer = nil;
+}
+
+// update LAC label text
+- (void)updateLrcLabel {
+    Float64 currentTime = CMTimeGetSeconds([[_playerManager currentPlayerItem] currentTime]);
+    NSString *lyric = [_currentLrcModel lyricForTimeInSec:currentTime];
+    [_LRCLabel setText:lyric];
+}
+
+#pragma lyricScrollView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
 }
+
 @end

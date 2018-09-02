@@ -9,9 +9,10 @@
 #import "playerManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
+#import "songModel.h"
 
 @interface playerManager ()
-
+@property (nonatomic, strong) songModel *currentSongModel;
 @end
 
 
@@ -32,14 +33,17 @@ static playerManager *_musicManager = nil;
 }
 
 // load the song
-- (void) loadMusic:(NSString *)fileName {
-    NSLog(@"manager play -- name: \"%@\"!", fileName);
+- (songModel *) loadMusic:(NSString *)fileName {
     NSURL *url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
     if (url) {
+        _currentSongModel = [[songModel alloc] init];
+        _currentSongModel.singer = @"邓紫棋";
+        _currentSongModel.songName = @"泡沫";
+        
         _playerItem = [[AVPlayerItem alloc] initWithURL:url];
         _player = [[AVPlayer alloc] initWithPlayerItem:_playerItem];
-        NSLog(@"load music");
     }
+    return _currentSongModel;
 }
 
 // Play the song

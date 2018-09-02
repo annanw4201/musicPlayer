@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @class AVPlayer;
 @class AVPlayerItem;
+@class songModel;
 
 @interface playerManager : NSObject
 @property (nonatomic,strong) AVPlayer *player;
@@ -20,6 +21,6 @@
 - (AVPlayerItem *) currentPlayerItem;
 - (void) didfinishPlaying;
 - (AVPlayer *) currentPlayer;
-- (void) loadMusic:(NSString *)fileName;
+- (songModel *) loadMusic:(NSString *)fileName;
 @end
 

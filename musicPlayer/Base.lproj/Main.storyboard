@@ -57,13 +57,13 @@
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y7a-qE-qPP" userLabel="ImageView">
-                                <rect key="frame" x="16" y="121" width="342" height="342"/>
+                                <rect key="frame" x="16" y="121" width="343" height="343"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="y7a-qE-qPP" secondAttribute="height" multiplier="1:1" id="iTa-zJ-xgI"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LsU-SF-QVy" userLabel="LRCLabel">
-                                <rect key="frame" x="166" y="493" width="42" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LRCLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LsU-SF-QVy" userLabel="LRCLabel">
+                                <rect key="frame" x="151" y="494" width="74" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="eSY-Dl-hdA"/>
                                 </constraints>
@@ -72,7 +72,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Drx-bG-vuN" userLabel="bottomView">
-                                <rect key="frame" x="0.0" y="533" width="375" height="134"/>
+                                <rect key="frame" x="0.0" y="534" width="375" height="133"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y89-7C-whu" userLabel="LastSong">
                                         <rect key="frame" x="61" y="45" width="64" height="64"/>
@@ -81,6 +81,9 @@
                                             <constraint firstAttribute="height" constant="64" id="t7q-nK-jmP"/>
                                         </constraints>
                                         <state key="normal" title="Button" image="pre"/>
+                                        <connections>
+                                            <action selector="lastSong:" destination="BYZ-38-t0r" eventType="touchUpInside" id="elS-6s-Oa6"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9bI-0a-11u" userLabel="Play">
                                         <rect key="frame" x="155" y="45" width="64" height="64"/>
@@ -150,6 +153,9 @@
                                     <constraint firstItem="Amx-Pc-bJ9" firstAttribute="leading" secondItem="5oT-D5-ct0" secondAttribute="trailing" constant="1" id="snh-2r-Kvj"/>
                                 </constraints>
                             </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rsf-ps-uiz">
+                                <rect key="frame" x="0.0" y="121" width="375" height="343"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -161,16 +167,20 @@
                             <constraint firstItem="zX9-Em-8cG" firstAttribute="top" secondItem="dO2-K9-qqI" secondAttribute="top" id="MWj-Wl-Qtv"/>
                             <constraint firstItem="Drx-bG-vuN" firstAttribute="bottom" secondItem="dO2-K9-qqI" secondAttribute="bottom" id="Mq6-P6-42l"/>
                             <constraint firstItem="oni-Xo-evz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="SO0-B6-psi"/>
+                            <constraint firstItem="rsf-ps-uiz" firstAttribute="top" secondItem="y7a-qE-qPP" secondAttribute="top" id="Txc-LK-3Nj"/>
                             <constraint firstItem="Drx-bG-vuN" firstAttribute="trailing" secondItem="oni-Xo-evz" secondAttribute="trailing" id="UWb-EG-zBV"/>
                             <constraint firstItem="Drx-bG-vuN" firstAttribute="leading" secondItem="dO2-K9-qqI" secondAttribute="leading" id="Wfz-EH-f49"/>
                             <constraint firstAttribute="trailing" secondItem="zX9-Em-8cG" secondAttribute="trailing" id="Z4n-Pz-dzd"/>
                             <constraint firstItem="y7a-qE-qPP" firstAttribute="centerX" secondItem="LsU-SF-QVy" secondAttribute="centerX" id="Z6a-1G-L7f"/>
                             <constraint firstItem="oni-Xo-evz" firstAttribute="leading" secondItem="dO2-K9-qqI" secondAttribute="leading" id="bgh-JZ-EhD"/>
                             <constraint firstItem="oni-Xo-evz" firstAttribute="trailing" secondItem="zX9-Em-8cG" secondAttribute="trailing" id="ccL-b5-nX3"/>
+                            <constraint firstItem="rsf-ps-uiz" firstAttribute="trailing" secondItem="zX9-Em-8cG" secondAttribute="trailing" id="dbz-qW-nq5"/>
                             <constraint firstItem="dO2-K9-qqI" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="hby-Ak-NJ4"/>
                             <constraint firstItem="oni-Xo-evz" firstAttribute="top" secondItem="zX9-Em-8cG" secondAttribute="top" id="jQp-g2-gcW"/>
                             <constraint firstItem="Drx-bG-vuN" firstAttribute="top" secondItem="LsU-SF-QVy" secondAttribute="bottom" constant="20" id="lYj-cc-yeX"/>
                             <constraint firstItem="y7a-qE-qPP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="mPA-QH-zCT"/>
+                            <constraint firstItem="rsf-ps-uiz" firstAttribute="bottom" secondItem="y7a-qE-qPP" secondAttribute="bottom" id="nLg-n6-GsL"/>
+                            <constraint firstItem="rsf-ps-uiz" firstAttribute="leading" secondItem="zX9-Em-8cG" secondAttribute="leading" id="nLv-hy-0Bb"/>
                             <constraint firstItem="Drx-bG-vuN" firstAttribute="centerX" secondItem="LsU-SF-QVy" secondAttribute="centerX" id="oYS-17-kwe"/>
                             <constraint firstItem="zX9-Em-8cG" firstAttribute="trailing" secondItem="dO2-K9-qqI" secondAttribute="trailing" id="std-mL-d0V"/>
                         </constraints>
@@ -178,15 +188,16 @@
                     </view>
                     <connections>
                         <outlet property="LRCLabel" destination="LsU-SF-QVy" id="d2m-dc-H47"/>
-                        <outlet property="authorLabel" destination="DSb-1q-0kG" id="D3M-Bf-9Na"/>
                         <outlet property="backGroundImageView" destination="oni-Xo-evz" id="oSs-g9-PIz"/>
                         <outlet property="currentTimeLabel" destination="P6U-I5-Cg8" id="o8E-3o-yzA"/>
                         <outlet property="lastSongButton" destination="Y89-7C-whu" id="yvb-6K-MCw"/>
+                        <outlet property="lyricScrollView" destination="rsf-ps-uiz" id="ylw-C5-MUQ"/>
                         <outlet property="nextSongButton" destination="EzH-yP-Vfu" id="RJ0-FD-fn1"/>
                         <outlet property="playButton" destination="9bI-0a-11u" id="lVx-k7-wJI"/>
+                        <outlet property="singerLabel" destination="DSb-1q-0kG" id="fuo-2d-yW5"/>
                         <outlet property="songImageView" destination="y7a-qE-qPP" id="ymg-DB-rOd"/>
+                        <outlet property="songNameLabel" destination="edj-PO-qM0" id="BmG-fq-0b8"/>
                         <outlet property="songSlider" destination="5oT-D5-ct0" id="DMp-Um-Ygl"/>
-                        <outlet property="titleLabel" destination="edj-PO-qM0" id="hlV-XW-hem"/>
                         <outlet property="totalTimeLabel" destination="Amx-Pc-bJ9" id="NUz-Rj-Gq4"/>
                     </connections>
                 </viewController>

@@ -20,6 +20,9 @@
 		CE092BC721311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CE092BC621311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 */; };
 		CE092BCA21311FEB00E9FF26 /* 泡沫-邓紫棋.lrc in Resources */ = {isa = PBXBuildFile; fileRef = CE092BC921311FEB00E9FF26 /* 泡沫-邓紫棋.lrc */; };
 		CE092BD421326F1400E9FF26 /* playerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BD321326F1400E9FF26 /* playerManager.m */; };
+		CE092BDB2138DA9200E9FF26 /* songModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BDA2138DA9200E9FF26 /* songModel.m */; };
+		CE092BE02138E94800E9FF26 /* fileFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BDF2138E94800E9FF26 /* fileFetcher.m */; };
+		CE092BE32139B78300E9FF26 /* lrcModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BE22139B78300E9FF26 /* lrcModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +65,12 @@
 		CE092BC921311FEB00E9FF26 /* 泡沫-邓紫棋.lrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "泡沫-邓紫棋.lrc"; sourceTree = "<group>"; };
 		CE092BD221326F1400E9FF26 /* playerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = playerManager.h; sourceTree = "<group>"; };
 		CE092BD321326F1400E9FF26 /* playerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = playerManager.m; sourceTree = "<group>"; };
+		CE092BD92138DA9200E9FF26 /* songModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = songModel.h; sourceTree = "<group>"; };
+		CE092BDA2138DA9200E9FF26 /* songModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = songModel.m; sourceTree = "<group>"; };
+		CE092BDE2138E94800E9FF26 /* fileFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fileFetcher.h; sourceTree = "<group>"; };
+		CE092BDF2138E94800E9FF26 /* fileFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fileFetcher.m; sourceTree = "<group>"; };
+		CE092BE12139B78300E9FF26 /* lrcModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lrcModel.h; sourceTree = "<group>"; };
+		CE092BE22139B78300E9FF26 /* lrcModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lrcModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +122,8 @@
 		CE092B8B212E5E0700E9FF26 /* musicPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				CE092BDC2138E90E00E9FF26 /* Tools */,
+				CE092BD82138DA6300E9FF26 /* models */,
 				CE092BCE213258CB00E9FF26 /* musicManager */,
 				CE092B8C212E5E0700E9FF26 /* AppDelegate.h */,
 				CE092B8D212E5E0700E9FF26 /* AppDelegate.m */,
@@ -187,6 +198,26 @@
 				CE092BD321326F1400E9FF26 /* playerManager.m */,
 			);
 			path = musicManager;
+			sourceTree = "<group>";
+		};
+		CE092BD82138DA6300E9FF26 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				CE092BD92138DA9200E9FF26 /* songModel.h */,
+				CE092BDA2138DA9200E9FF26 /* songModel.m */,
+				CE092BE12139B78300E9FF26 /* lrcModel.h */,
+				CE092BE22139B78300E9FF26 /* lrcModel.m */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		CE092BDC2138E90E00E9FF26 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				CE092BDE2138E94800E9FF26 /* fileFetcher.h */,
+				CE092BDF2138E94800E9FF26 /* fileFetcher.m */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,7 +357,10 @@
 				CE092B91212E5E0700E9FF26 /* PlayerViewController.m in Sources */,
 				CE092B9F212E5E0800E9FF26 /* main.m in Sources */,
 				CE092BD421326F1400E9FF26 /* playerManager.m in Sources */,
+				CE092BDB2138DA9200E9FF26 /* songModel.m in Sources */,
 				CE092B8E212E5E0700E9FF26 /* AppDelegate.m in Sources */,
+				CE092BE02138E94800E9FF26 /* fileFetcher.m in Sources */,
+				CE092BE32139B78300E9FF26 /* lrcModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
