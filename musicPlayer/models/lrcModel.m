@@ -96,5 +96,9 @@
     return _currentLyric;
 }
 
+// get the lyric array
+- (NSArray *)getLyricArr {
+    return _lyricArr;
+}
 
 @end

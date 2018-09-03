@@ -23,6 +23,7 @@
 		CE092BDB2138DA9200E9FF26 /* songModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BDA2138DA9200E9FF26 /* songModel.m */; };
 		CE092BE02138E94800E9FF26 /* fileFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BDF2138E94800E9FF26 /* fileFetcher.m */; };
 		CE092BE32139B78300E9FF26 /* lrcModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BE22139B78300E9FF26 /* lrcModel.m */; };
+		CE092BEA213B9A5800E9FF26 /* lyricScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		CE092BDF2138E94800E9FF26 /* fileFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fileFetcher.m; sourceTree = "<group>"; };
 		CE092BE12139B78300E9FF26 /* lrcModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lrcModel.h; sourceTree = "<group>"; };
 		CE092BE22139B78300E9FF26 /* lrcModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lrcModel.m; sourceTree = "<group>"; };
+		CE092BE8213B9A5800E9FF26 /* lyricScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lyricScrollView.h; sourceTree = "<group>"; };
+		CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lyricScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				CE092B8D212E5E0700E9FF26 /* AppDelegate.m */,
 				CE092B8F212E5E0700E9FF26 /* PlayerViewController.h */,
 				CE092B90212E5E0700E9FF26 /* PlayerViewController.m */,
+				CE092BE8213B9A5800E9FF26 /* lyricScrollView.h */,
+				CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */,
 				CE092B92212E5E0700E9FF26 /* Main.storyboard */,
 				CE092B98212E5E0800E9FF26 /* Assets.xcassets */,
 				CE092B9A212E5E0800E9FF26 /* LaunchScreen.storyboard */,
@@ -356,6 +361,7 @@
 				CE092B97212E5E0700E9FF26 /* musicPlayer.xcdatamodeld in Sources */,
 				CE092B91212E5E0700E9FF26 /* PlayerViewController.m in Sources */,
 				CE092B9F212E5E0800E9FF26 /* main.m in Sources */,
+				CE092BEA213B9A5800E9FF26 /* lyricScrollView.m in Sources */,
 				CE092BD421326F1400E9FF26 /* playerManager.m in Sources */,
 				CE092BDB2138DA9200E9FF26 /* songModel.m in Sources */,
 				CE092B8E212E5E0700E9FF26 /* AppDelegate.m in Sources */,

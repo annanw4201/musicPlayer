@@ -11,6 +11,7 @@
 #import "playerManager.h"
 #import "songModel.h"
 #import "lrcModel.h"
+#import "lyricScrollView.h"
 
 @interface PlayerViewController () <UIScrollViewDelegate>
 // back ground image
@@ -29,7 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *LRCLabel;
 
 // lyric scroll view
-@property (weak, nonatomic) IBOutlet UIScrollView *lyricScrollView;
+@property (strong, nonatomic) IBOutlet lyricScrollView *lyricScrollView;
 
 
 // player control
@@ -65,6 +66,9 @@
     
     // prepare for playing the song
     [self prepareToPlay];
+    
+    // lyric scroll view setup
+    [self setupLyricScrollView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 }
@@ -319,8 +323,20 @@
 }
 
 #pragma lyricScrollView
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
+// lyric scroll view setup
+- (void)setupLyricScrollView {
+    _lyricScrollView.delegate = self;
+    [_lyricScrollView setContentSize:CGSizeMake([[self view] frame].size.width * 2, 0)];
+    [_lyricScrollView setLrcArr:[_currentLrcModel getLyricArr]];
 }
+
+// scroll view did scroll
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGPoint offcetPoint = [scrollView contentOffset];
+    CGFloat alpha = 1 - offcetPoint.x / [[self view] frame].size.width;
+    [_songImageView setAlpha:alpha];
+    [_LRCLabel setAlpha:alpha];
+}
+
 
 @end

@@ -14,4 +14,5 @@
 
 - (NSString *)lyricForTimeInSec: (float)time;
 
+- (NSArray *)getLyricArr;
 @end
