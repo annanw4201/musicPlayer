@@ -24,6 +24,9 @@
 		CE092BE02138E94800E9FF26 /* fileFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BDF2138E94800E9FF26 /* fileFetcher.m */; };
 		CE092BE32139B78300E9FF26 /* lrcModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BE22139B78300E9FF26 /* lrcModel.m */; };
 		CE092BEA213B9A5800E9FF26 /* lyricScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */; };
+		CE092BEC213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */; };
+		CE092BEE213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */; };
+		CE092BF0213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +77,9 @@
 		CE092BE22139B78300E9FF26 /* lrcModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lrcModel.m; sourceTree = "<group>"; };
 		CE092BE8213B9A5800E9FF26 /* lyricScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lyricScrollView.h; sourceTree = "<group>"; };
 		CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lyricScrollView.m; sourceTree = "<group>"; };
+		CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "最佳损友-陈奕迅.lrc"; sourceTree = "<group>"; };
+		CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "最佳损友-陈奕迅.mp3"; sourceTree = "<group>"; };
+		CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "最佳损友-陈奕迅.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				CE092BC321311F6100E9FF26 /* 泡沫-邓紫棋.jpg */,
+				CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -184,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				CE092BC621311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 */,
+				CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */,
 			);
 			path = musics;
 			sourceTree = "<group>";
@@ -192,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				CE092BC921311FEB00E9FF26 /* 泡沫-邓紫棋.lrc */,
+				CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */,
 			);
 			path = LRCs;
 			sourceTree = "<group>";
@@ -330,9 +339,12 @@
 			files = (
 				CE092B9C212E5E0800E9FF26 /* LaunchScreen.storyboard in Resources */,
 				CE092B99212E5E0800E9FF26 /* Assets.xcassets in Resources */,
+				CE092BEC213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc in Resources */,
+				CE092BF0213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg in Resources */,
 				CE092BCA21311FEB00E9FF26 /* 泡沫-邓紫棋.lrc in Resources */,
 				CE092BC421311F6100E9FF26 /* 泡沫-邓紫棋.jpg in Resources */,
 				CE092BC721311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 in Resources */,
+				CE092BEE213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 in Resources */,
 				CE092B94212E5E0700E9FF26 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

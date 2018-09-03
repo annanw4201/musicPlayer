@@ -11,8 +11,9 @@
 @interface lrcModel : NSObject
 
 - (void)lrcWithFile: (NSString *)fileName;
-
 - (NSString *)lyricForTimeInSec: (float)time;
-
 - (NSArray *)getLyricArr;
+- (NSString *)getSongName;
+- (NSString *)getSinger;
+- (NSString *)getAlbumName;
 @end

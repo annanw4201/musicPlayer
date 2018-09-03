@@ -96,9 +96,22 @@
     return _currentLyric;
 }
 
-// get the lyric array
+#pragma getters
+// getters
 - (NSArray *)getLyricArr {
     return _lyricArr;
+}
+
+- (NSString *)getSongName {
+    return _songName;
+}
+
+- (NSString *)getSinger {
+    return _singer;
+}
+
+- (NSString *)getAlbumName {
+    return _albumName;
 }
 
 @end

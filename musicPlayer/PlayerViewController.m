@@ -65,7 +65,7 @@
     [self setupLrcLabel];
     
     // prepare for playing the song
-    [self prepareToPlay];
+    [self prepareToPlay:@"泡沫-邓紫棋"];
     
     // lyric scroll view setup
     [self setupLyricScrollView];
@@ -109,20 +109,29 @@
 }
 
 // set up to play
-- (void)prepareToPlay {
+- (void)prepareToPlay:(NSString *)fileName{
     if (!_playerManager) _playerManager = [playerManager musicManager];
-    songModel *songModel = [_playerManager loadMusic:@"泡沫-邓紫棋"];
-    [_singerLabel setText:songModel.singer];
-    [_songNameLabel setText:songModel.songName];
+    [_playerManager loadMusic:fileName];
+//    songModel *songModel = [_playerManager loadMusic:fileName];
+//    [_singerLabel setText:songModel.singer];
+//    [_songNameLabel setText:songModel.songName];
     
     _currentLrcModel = [[lrcModel alloc] init];
-    [_currentLrcModel lrcWithFile:@"泡沫-邓紫棋.lrc"];
+    NSString *lrcFile = [NSString stringWithFormat:@"%@.lrc", fileName];
+    [_currentLrcModel lrcWithFile:lrcFile];
+    [_singerLabel setText:[_currentLrcModel getSinger]];
+    [_songNameLabel setText:[_currentLrcModel getSongName]];
     
     [self addLrcLabelTimer]; // add lrc timer to update LRC label
+    [_lyricScrollView setLrcArr:[_currentLrcModel getLyricArr]];
+    
+    [_backGroundImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]];
+    [_songImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]];
     
     AVPlayerItem *currentPlayerItem = [[self playerManager] currentPlayerItem];
     Float64 totalTime = CMTimeGetSeconds([[currentPlayerItem asset] duration]);
     [[self totalTimeLabel] setText:[self stringForTime:totalTime]];
+    
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
     [self addSongImageViewAnimate];
     [self play:[self playButton]];
@@ -131,7 +140,7 @@
 // play the song
 - (IBAction)play:(UIButton *)sender {
     if (_playerManager) {
-        if ([_playerManager play:@"泡沫-邓紫棋"]) {
+        if ([_playerManager play:nil]) {
             NSLog(@"TO PLAY");
             [self addSliderTimer];
             [self addLrcLabelTimer];
@@ -151,12 +160,12 @@
 
 // play next song
 - (IBAction)nextSong:(UIButton *)sender {
-    [self prepareToPlay];
+    [self prepareToPlay:@"最佳损友-陈奕迅"];
 }
 
 // play last song
 - (IBAction)lastSong:(UIButton *)sender {
-    [self prepareToPlay];
+    [self prepareToPlay:@"泡沫-邓紫棋"];
 }
 
 // update progress of the song
