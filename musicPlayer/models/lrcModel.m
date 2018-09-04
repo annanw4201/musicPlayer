@@ -22,7 +22,8 @@
 @implementation lrcModel
 
 - (id)init {
-    if (self = [super init]) {
+    self = [super init];
+    if (self) {
         _songName = @"Unknown";
         _singer = @"Unknown";
         _albumName = @"Unknown";
@@ -85,14 +86,15 @@
 - (NSString *) lyricForTimeInSec:(float)time {
     NSInteger index = 0;
     for (; index < [_timeArr count]; ++index) {
-        
         float timeItemFloatVal = [[_timeArr objectAtIndex:index] floatValue];
         if (time < timeItemFloatVal) {
             --index;
             break;
         }
     }
-    _currentLyric = index >= [_lyricArr count] ? [_lyricArr lastObject] : [_lyricArr objectAtIndex:index];
+    index = index >= [_lyricArr count] ? [_lyricArr count] - 1 : index;
+    _currentLyric = [_lyricArr objectAtIndex:index];
+    _currentTimeIndex = index;
     return _currentLyric;
 }
 
@@ -112,6 +114,10 @@
 
 - (NSString *)getAlbumName {
     return _albumName;
+}
+
+- (NSInteger)getCurrentTimeIndex {
+    return _currentTimeIndex;
 }
 
 @end

@@ -16,4 +16,5 @@
 - (NSString *)getSongName;
 - (NSString *)getSinger;
 - (NSString *)getAlbumName;
+- (NSInteger)getCurrentTimeIndex;
 @end

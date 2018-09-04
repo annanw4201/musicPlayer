@@ -11,6 +11,7 @@
 @interface lyricScrollView () <UITableViewDataSource>
 @property (nonatomic, weak) UITableView *lrcTableView;
 @property (nonatomic, strong) NSArray *lyricArr;
+@property (nonatomic) NSInteger currentLyricIndex;
 @end
 
 @implementation lyricScrollView
@@ -34,6 +35,7 @@
 }
 
 - (void)setup {
+    _currentLyricIndex = 0;
     [self setShowsHorizontalScrollIndicator:NO];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -68,12 +70,32 @@
  }
  */
 
+// scroll the table view to the specified row (must reload tableView first, or won't work)
+- (void)scrollToRow:(NSInteger)row {
+    if (row != _currentLyricIndex) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self->_lrcTableView reloadData];
+            NSIndexPath *currentTimeRow = [NSIndexPath indexPathForRow:row inSection:0];
+            [self->_lrcTableView scrollToRowAtIndexPath:currentTimeRow atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            self->_currentLyricIndex = row;
+            NSLog(@"scroll to row: %ld", (long)row);
+        });
+    }
+}
+
 #pragma tableViewDelegate
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"lyricCell"];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    if ([indexPath row] == _currentLyricIndex) {
+        [cell.textLabel setFont:[UIFont systemFontOfSize:20]];
+        [cell.textLabel setTextColor:[UIColor greenColor]];
+    }
+    else {
+        [cell.textLabel setFont:[UIFont systemFontOfSize:14]];
+        [cell.textLabel setTextColor:[UIColor whiteColor]];
+    }
     [cell setBackgroundColor:[UIColor clearColor]];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
     [cell.textLabel setText:[_lyricArr objectAtIndex:[indexPath row]]];
     [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
     return cell;
@@ -85,5 +107,8 @@
     return rowNum;
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
 
 @end

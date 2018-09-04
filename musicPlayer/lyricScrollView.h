@@ -10,4 +10,5 @@
 
 @interface lyricScrollView : UIScrollView
 - (void)setLrcArr: (NSArray *)lrcArr;
+- (void)scrollToRow:(NSInteger)row;
 @end

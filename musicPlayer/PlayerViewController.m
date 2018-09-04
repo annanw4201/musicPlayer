@@ -57,6 +57,8 @@
     NSLog(@"view did load");
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    // update status bar style to be what's set in preferredStatusBarStyle
+    [self setNeedsStatusBarAppearanceUpdate];
     
     // song slider setup
     [self songSliderSetup];
@@ -100,6 +102,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+// set the status bar to be light
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+#pragma songManager
 // get time in string format as "01:01"
 - (NSString *)stringForTime:(Float64)time {
     NSInteger min = time / 60;
@@ -329,6 +337,7 @@
     Float64 currentTime = CMTimeGetSeconds([[_playerManager currentPlayerItem] currentTime]);
     NSString *lyric = [_currentLrcModel lyricForTimeInSec:currentTime];
     [_LRCLabel setText:lyric];
+    [_lyricScrollView scrollToRow:[_currentLrcModel getCurrentTimeIndex]];
 }
 
 #pragma lyricScrollView
