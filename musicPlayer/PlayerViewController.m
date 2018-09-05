@@ -12,6 +12,9 @@
 #import "songModel.h"
 #import "lrcModel.h"
 #import "lyricScrollView.h"
+#import <MediaPlayer/MediaPlayer.h>
+
+#define debug true
 
 @interface PlayerViewController () <UIScrollViewDelegate>
 // back ground image
@@ -54,9 +57,10 @@
 @synthesize playerManager = _playerManager;
 
 - (void)viewDidLoad {
-    NSLog(@"view did load");
+    if (debug) NSLog(@"PlayerViewController:view did load");
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
     // update status bar style to be what's set in preferredStatusBarStyle
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -72,28 +76,34 @@
     // lyric scroll view setup
     [self setupLyricScrollView];
     
+    // when the app back to foreground add roatable image animation
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
+    
+    // enable recieving remote control events
+    [self setupRemoteControl];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"view will appear");
+    if (debug) NSLog(@"PlayerViewController:view will appear");
     [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    NSLog(@"view did appear");
+    if (debug) NSLog(@"PlayerViewController:view did appear");
     [super viewDidAppear:animated];
     // song image view setup
     [self songImageViewSetup];
 }
 
 - (void)viewWillLayoutSubviews {
-    //NSLog(@"view will layout subview");
+    //if (debug) NSLog(@"view will layout subview");
     [super viewWillLayoutSubviews];
 }
 
 - (void)awakeFromNib {
-    NSLog(@"awake from nib");
+    if (debug) NSLog(@"PlayerViewController:awake from nib");
     [super awakeFromNib];
 }
 
@@ -112,29 +122,26 @@
 - (NSString *)stringForTime:(Float64)time {
     NSInteger min = time / 60;
     NSInteger sec = round((int)time % 60);
-    //NSLog(@"%02ld:%02ld", min, sec);
+    //if (debug) NSLog(PlayerViewController:@"%02ld:%02ld", min, sec);
     return [NSString stringWithFormat:@"%02ld:%02ld", min, sec];
 }
 
-// set up to play
+// set up current playing song
 - (void)prepareToPlay:(NSString *)fileName{
     if (!_playerManager) _playerManager = [playerManager musicManager];
     [_playerManager loadMusic:fileName];
-//    songModel *songModel = [_playerManager loadMusic:fileName];
-//    [_singerLabel setText:songModel.singer];
-//    [_songNameLabel setText:songModel.songName];
     
-    _currentLrcModel = [[lrcModel alloc] init];
+    // setup lrc model
     NSString *lrcFile = [NSString stringWithFormat:@"%@.lrc", fileName];
-    [_currentLrcModel lrcWithFile:lrcFile];
+    _currentLrcModel = [[lrcModel alloc] initWithFile:lrcFile];
     [_singerLabel setText:[_currentLrcModel getSinger]];
     [_songNameLabel setText:[_currentLrcModel getSongName]];
     
     [self addLrcLabelTimer]; // add lrc timer to update LRC label
-    [_lyricScrollView setLrcArr:[_currentLrcModel getLyricArr]];
+    [_lyricScrollView setLrcArr:[_currentLrcModel getLyricArr]]; // set data to be displayed on the lyric scroll view
     
-    [_backGroundImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]];
-    [_songImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]];
+    [_backGroundImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]]; // set background image below the blur visual effect
+    [_songImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]]; // set the rotatable image
     
     AVPlayerItem *currentPlayerItem = [[self playerManager] currentPlayerItem];
     Float64 totalTime = CMTimeGetSeconds([[currentPlayerItem asset] duration]);
@@ -145,24 +152,23 @@
     [self play:[self playButton]];
 }
 
-// play the song
+// play or pause the song
 - (IBAction)play:(UIButton *)sender {
     if (_playerManager) {
         if ([_playerManager play:nil]) {
-            NSLog(@"TO PLAY");
+            if (debug) NSLog(@"PlayerViewController:TO PLAY");
             [self addSliderTimer];
             [self addLrcLabelTimer];
             [self resumeSongImageViewAnimate];
             [sender setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         }
         else {
-            NSLog(@"TO PAUSE");
+            if (debug) NSLog(@"PlayerViewController:TO PAUSE");
             [self removeSliderTimer];
             [self removeLrcLabelTimer];
             [self pauseSongImageViewAnimate];
             [sender  setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         }
-        
     }
 }
 
@@ -186,7 +192,7 @@
 
 // handle after finishing the song
 -(void)didFinishPlaying {
-    NSLog(@"finish playing");
+    if (debug) NSLog(@"PlayerViewController:finish playing");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
     [self removeSliderTimer];
     [self removeLrcLabelTimer];
@@ -212,7 +218,7 @@
     [self removeSliderTimer];
     if ([[self songSlider] isHighlighted]) {
         [self sliderEndDragging];
-        NSLog(@"tap do slide");
+        if (debug) NSLog(@"PlayerViewController:tap do slide");
     }
     else {
         [self addSliderTimer];
@@ -235,7 +241,7 @@
 
 // handle when end dragging song slider
 - (void)sliderEndDragging {
-    NSLog(@"end dragging");
+    if (debug) NSLog(@"PlayerViewController:end dragging");
     [self addSliderTimer];
     [self addLrcLabelTimer];
     [self updateSongProgress];
@@ -255,7 +261,7 @@
 
 // remove timer from the slider
 -(void) removeSliderTimer {
-    NSLog(@"remove slider timer");
+    if (debug) NSLog(@"PlayerViewController:remove slider timer");
     [[self songSliderTimer] invalidate];
     self.songSliderTimer = nil;
 }
@@ -263,7 +269,7 @@
 // add timer to slider for updating progress
 -(void) addSliderTimer {
     [self removeSliderTimer];
-    NSLog(@"add slider timer");
+    if (debug) NSLog(@"PlayerViewController:add slider timer");
     self.songSliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateSliderProgress) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop]addTimer:self.songSliderTimer forMode:NSRunLoopCommonModes];
 }
@@ -271,7 +277,6 @@
 #pragma songImage
 // setup songImageView
 - (void)songImageViewSetup {
-    [_songImageView setImage:[UIImage imageNamed:@"泡沫-邓紫棋.jpg"]];
     [[self.songImageView layer] setCornerRadius:[self.songImageView bounds].size.height * 0.5];
     [[self.songImageView layer] setMasksToBounds:YES];
     
@@ -281,7 +286,7 @@
 
 // add animation of the song image view
 - (void)addSongImageViewAnimate {
-    NSLog(@"add song imgView animate");
+    if (debug) NSLog(@"PlayerViewController:add song imgView animate");
     CABasicAnimation *rotateAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
     [rotateAnimation setFromValue:[NSNumber numberWithFloat:0.0]];
     [rotateAnimation setToValue:[NSNumber numberWithFloat:M_PI * 2]];
@@ -292,7 +297,7 @@
 
 // pause the song image view
 - (void)pauseSongImageViewAnimate {
-    NSLog(@"pause song imgView animate");
+    if (debug) NSLog(@"PlayerViewController:pause song imgView animate");
     CFTimeInterval timeOffset = [[_songImageView layer] convertTime:CACurrentMediaTime() fromLayer:nil];
     [[_songImageView layer] setSpeed:0.0];
     [[_songImageView layer] setTimeOffset:timeOffset];
@@ -300,7 +305,7 @@
 
 // resume the song image view
 - (void)resumeSongImageViewAnimate {
-    NSLog(@"resume song imgView animate");
+    if (debug) NSLog(@"PlayerViewController:resume song imgView animate");
     
     CFTimeInterval timeAtPause = [[_songImageView layer] timeOffset];
     [[_songImageView layer] setSpeed:1.0];
@@ -320,14 +325,14 @@
 // add timer to update LRC label
 - (void)addLrcLabelTimer {
     [self removeLrcLabelTimer];
-    NSLog(@"add lrc timer");
+    if (debug) NSLog(@"PlayerViewController:add lrc timer");
     self.lrcLabelTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcLabel)];
     [_lrcLabelTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
 // remove timer from LRC label
 - (void)removeLrcLabelTimer {
-    NSLog(@"remove lrc timer");
+    if (debug) NSLog(@"PlayerViewController:remove lrc timer");
     [self.lrcLabelTimer invalidate];
     _lrcLabelTimer = nil;
 }
@@ -356,5 +361,36 @@
     [_LRCLabel setAlpha:alpha];
 }
 
+#pragma remoteControl
+// let current view controller can be first responder to the remote control
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+// set up the remote control
+- (void)setupRemoteControl {
+    MPRemoteCommandCenter *remoteControlCenter = [MPRemoteCommandCenter sharedCommandCenter];
+    
+    [remoteControlCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [self play:self.playButton];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [remoteControlCenter.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [self play:self.playButton];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [remoteControlCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [self play:self.playButton];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [remoteControlCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [self lastSong:self.lastSongButton];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [remoteControlCenter.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [self nextSong:self.nextSongButton];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+}
 
 @end

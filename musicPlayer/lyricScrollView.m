@@ -7,6 +7,7 @@
 //
 
 #import "lyricScrollView.h"
+#define cellIdentifier @"lyricCell"
 
 @interface lyricScrollView () <UITableViewDataSource>
 @property (nonatomic, weak) UITableView *lrcTableView;
@@ -43,10 +44,10 @@
     UITableView *lyricTableView = [[UITableView alloc] initWithFrame:lrcTableViewFrame];
     
     [lyricTableView setDataSource:self];
-    [lyricTableView registerClass:[UITableViewCell self] forCellReuseIdentifier:@"lyricCell"];
+    [lyricTableView registerClass:[UITableViewCell self] forCellReuseIdentifier:cellIdentifier];
     [self addSubview:lyricTableView];
     _lrcTableView = lyricTableView;
-    NSLog(@"%@", _lrcTableView);
+    NSLog(@"lyricScrollView:%@", _lrcTableView);
 }
 
 // set and configure table view (when put following codes inside setup, no updates to tableView)
@@ -57,7 +58,7 @@
 }
 
 - (void)setLrcArr:(NSArray *)lrcArr {
-    NSLog(@"setLrcArr, Size: %lu", (unsigned long)[lrcArr count]);
+    NSLog(@"lyricScrollView:setLrcArr, Size: %lu", (unsigned long)[lrcArr count]);
     _lyricArr = lrcArr;
     [_lrcTableView reloadData];
 }
@@ -74,18 +75,18 @@
 - (void)scrollToRow:(NSInteger)row {
     if (row != _currentLyricIndex) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self->_lrcTableView reloadData];
+            [self.lrcTableView reloadData];
             NSIndexPath *currentTimeRow = [NSIndexPath indexPathForRow:row inSection:0];
-            [self->_lrcTableView scrollToRowAtIndexPath:currentTimeRow atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-            self->_currentLyricIndex = row;
-            NSLog(@"scroll to row: %ld", (long)row);
+            [self.lrcTableView scrollToRowAtIndexPath:currentTimeRow atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            self.currentLyricIndex = row;
+            NSLog(@"lyricScrollView:scroll to row: %ld", (long)row);
         });
     }
 }
 
 #pragma tableViewDelegate
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"lyricCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if ([indexPath row] == _currentLyricIndex) {
         [cell.textLabel setFont:[UIFont systemFontOfSize:20]];

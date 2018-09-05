@@ -33,6 +33,19 @@
     return self;
 }
 
+- (id)initWithFile:(NSString *)fileName {
+    self = [super init];
+    if (self) {
+        _songName = @"Unknown";
+        _singer = @"Unknown";
+        _albumName = @"Unknown";
+        _currentLyric = @"";
+        _currentTimeIndex = 0;
+        [self setupWithFile:fileName];
+    }
+    return self;
+}
+
 // convert time string "01:06.06" into seconds
 - (NSNumber *)lrcTime: (NSString *)timeStr {
     float time = 0.0;
@@ -49,7 +62,7 @@
 }
 
 // build time array with corresponding lyric array using passing file
-- (void)lrcWithFile:(NSString *)fileName {
+- (void)setupWithFile:(NSString *)fileName {
     NSMutableArray *mutableTimeArr = [[NSMutableArray alloc] init];
     NSMutableArray *mutableLyricArr = [[NSMutableArray alloc] init];
     

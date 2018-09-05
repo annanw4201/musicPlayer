@@ -37,9 +37,6 @@ static playerManager *_musicManager = nil;
     NSURL *url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
     if (url) {
         _currentSongModel = [[songModel alloc] init];
-//        _currentSongModel.singer = @"邓紫棋";
-//        _currentSongModel.songName = @"泡沫";
-        
         _playerItem = [[AVPlayerItem alloc] initWithURL:url];
         _player = [[AVPlayer alloc] initWithPlayerItem:_playerItem];
     }
