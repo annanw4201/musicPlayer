@@ -91,11 +91,13 @@
     if ([indexPath row] == _currentLyricIndex) {
         [cell.textLabel setFont:[UIFont systemFontOfSize:20]];
         [cell.textLabel setTextColor:[UIColor greenColor]];
-    }
+    } // if at current lyric, zoom in
     else {
         [cell.textLabel setFont:[UIFont systemFontOfSize:14]];
         [cell.textLabel setTextColor:[UIColor whiteColor]];
-    }
+    } // not at current lyric, regualr font size
+    [cell.textLabel setNumberOfLines:0]; // the lyric will be fully displayed
+    [cell.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
     [cell setBackgroundColor:[UIColor clearColor]];
     [cell.textLabel setText:[_lyricArr objectAtIndex:[indexPath row]]];
     [cell.textLabel setTextAlignment:NSTextAlignmentCenter];

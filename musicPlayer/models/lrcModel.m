@@ -24,9 +24,9 @@
 - (id)init {
     self = [super init];
     if (self) {
-        _songName = @"Unknown";
-        _singer = @"Unknown";
-        _albumName = @"Unknown";
+        _songName = @"Unknown Title";
+        _singer = @"Unknown Singer";
+        _albumName = @"Unknown Album";
         _currentLyric = @"";
         _currentTimeIndex = 0;
     }
@@ -36,9 +36,9 @@
 - (id)initWithFile:(NSString *)fileName {
     self = [super init];
     if (self) {
-        _songName = @"Unknown";
-        _singer = @"Unknown";
-        _albumName = @"Unknown";
+        _songName = @"Unknown Title";
+        _singer = @"Unknown Singer";
+        _albumName = @"Unknown Album";
         _currentLyric = @"";
         _currentTimeIndex = 0;
         [self setupWithFile:fileName];

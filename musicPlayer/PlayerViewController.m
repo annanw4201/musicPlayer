@@ -343,6 +343,7 @@
     NSString *lyric = [_currentLrcModel lyricForTimeInSec:currentTime];
     [_LRCLabel setText:lyric];
     [_lyricScrollView scrollToRow:[_currentLrcModel getCurrentTimeIndex]];
+    [self setupNowPlaying]; // update remote control info
 }
 
 #pragma lyricScrollView
@@ -372,25 +373,46 @@
     MPRemoteCommandCenter *remoteControlCenter = [MPRemoteCommandCenter sharedCommandCenter];
     
     [remoteControlCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        if (debug) NSLog(@"PlayerViewController:mp play");
         [self play:self.playButton];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [remoteControlCenter.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        if (debug) NSLog(@"PlayerViewController:mp toggle play");
         [self play:self.playButton];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [remoteControlCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        if (debug) NSLog(@"PlayerViewController:mp pause");
         [self play:self.playButton];
+        
+        // set the remote control playback rate to be 0.0, otherwise the elasped and total time will kepp counting
+        NSMutableDictionary *playingInfo = [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo mutableCopy];
+        [playingInfo setValue:[NSNumber numberWithDouble:0.0] forKeyPath:MPNowPlayingInfoPropertyPlaybackRate];
+        [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:playingInfo];
+        
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [remoteControlCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        if (debug) NSLog(@"PlayerViewController:mp pre");
         [self lastSong:self.lastSongButton];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [remoteControlCenter.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        if (debug) NSLog(@"PlayerViewController:mp next");
         [self nextSong:self.nextSongButton];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 }
 
+- (void)setupNowPlaying {
+    NSMutableDictionary *playingInfo = [[NSMutableDictionary alloc] init];
+    [playingInfo setObject:self.songNameLabel.text forKey:MPMediaItemPropertyTitle]; // set song name
+    [playingInfo setObject:self.singerLabel.text forKey:MPMediaItemPropertyArtist]; // set singer name
+    NSNumber *totalTime = [NSNumber numberWithFloat:CMTimeGetSeconds([[self.playerManager currentPlayerItem] asset].duration)];
+    NSNumber *elapsedTime = [NSNumber numberWithFloat:CMTimeGetSeconds([[self.playerManager currentPlayerItem] currentTime])];
+    [playingInfo setObject:totalTime forKey:MPMediaItemPropertyPlaybackDuration]; // set total time
+    [playingInfo setObject:elapsedTime forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime]; // set elapsed time
+    [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:playingInfo];
+}
 @end
