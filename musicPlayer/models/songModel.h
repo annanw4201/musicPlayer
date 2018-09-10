@@ -7,13 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+@class UIImage;
+@class lrcModel;
 
 @interface songModel : NSObject
-@property (nonatomic, copy) NSNumber *songID;
+@property (nonatomic, copy) NSString *songmid;
 @property (nonatomic, copy) NSString *songName;
 @property (nonatomic, copy) NSString *singer;
-@property (nonatomic, copy) NSString *lrcName;
-@property (nonatomic, copy) NSString *songImage;
-
-
+@property (nonatomic, copy) NSString *songAlbumName;
+@property (nonatomic, strong) UIImage *songMPArtWork;
+@property (nonatomic, copy) NSURL *songURL;
+@property (nonatomic, strong)lrcModel *lrcModel;
 @end

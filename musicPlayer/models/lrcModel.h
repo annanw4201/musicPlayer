@@ -12,6 +12,7 @@
 
 - (void)setupWithFile: (NSString *)fileName;
 - (id)initWithFile:(NSString *)fileName;
+- (id)init;
 - (NSString *)lyricForTimeInSec: (float)time;
 - (NSArray *)getLyricArr;
 - (NSString *)getSongName;

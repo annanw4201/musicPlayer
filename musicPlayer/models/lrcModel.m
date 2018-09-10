@@ -27,8 +27,10 @@
         _songName = @"Unknown Title";
         _singer = @"Unknown Singer";
         _albumName = @"Unknown Album";
-        _currentLyric = @"";
+        _currentLyric = @"No Lyric";
         _currentTimeIndex = 0;
+        _timeArr = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithFloat:0.0], nil];
+        _lyricArr = [[NSMutableArray alloc] initWithObjects:@"No Lyric", nil];
     }
     return self;
 }
@@ -39,7 +41,7 @@
         _songName = @"Unknown Title";
         _singer = @"Unknown Singer";
         _albumName = @"Unknown Album";
-        _currentLyric = @"";
+        _currentLyric = @"No Lyric";
         _currentTimeIndex = 0;
         [self setupWithFile:fileName];
     }
@@ -83,8 +85,6 @@
             NSArray *lineArr = [line componentsSeparatedByString:@"]"];
             NSString *timeStr = [lineArr firstObject];
             NSString *lyric = [lineArr lastObject];
-            if (debug) NSLog(@"timestr: %@", timeStr);
-            if (debug) NSLog(@"lyric: %@", lyric);
             NSNumber *lyricTime = [self lrcTime:timeStr];
             [mutableTimeArr addObject:lyricTime];
             [mutableLyricArr addObject:lyric];
@@ -98,16 +98,18 @@
 // retrieve the lyric for a specific time in seconds
 - (NSString *) lyricForTimeInSec:(float)time {
     NSInteger index = 0;
-    for (; index < [_timeArr count]; ++index) {
-        float timeItemFloatVal = [[_timeArr objectAtIndex:index] floatValue];
-        if (time < timeItemFloatVal) {
-            --index;
-            break;
+    if (_timeArr && [_timeArr count] > 0) {
+        for (; index < [_timeArr count]; ++index) {
+            float timeItemFloatVal = [[_timeArr objectAtIndex:index] floatValue];
+            if (time < timeItemFloatVal) {
+                --index;
+                break;
+            }
         }
+        index = index >= [_lyricArr count] ? [_lyricArr count] - 1 : index;
+        _currentLyric = [_lyricArr objectAtIndex:index];
+        _currentTimeIndex = index;
     }
-    index = index >= [_lyricArr count] ? [_lyricArr count] - 1 : index;
-    _currentLyric = [_lyricArr objectAtIndex:index];
-    _currentTimeIndex = index;
     return _currentLyric;
 }
 

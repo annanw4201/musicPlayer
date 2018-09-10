@@ -7,7 +7,22 @@
 //
 
 #import "songModel.h"
+#import "lrcModel.h"
+
+@interface songModel()
+
+@end
 
 @implementation songModel
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.songName = @"Unknown Title";
+        self.songAlbumName = @"Unknown Album";
+        self.singer = @"Unknown Singer";
+        self.lrcModel = [[lrcModel alloc] init];
+    }
+    return self;
+}
 
 @end

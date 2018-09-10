@@ -9,5 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface fileFetcher : NSObject
-
++ (NSArray *)querySongList;
++ (NSString *)querySongmid:(NSDictionary *)songData;
++ (NSURL *)urlOfSongmid:(NSString *)songmid;
 @end

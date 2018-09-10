@@ -10,9 +10,14 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
 #import "songModel.h"
+#import "fileFetcher.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "lrcModel.h"
 
 @interface playerManager ()
 @property (nonatomic, strong) songModel *currentSongModel;
+@property (nonatomic, strong) NSArray *songModelList;
+@property (nonatomic, assign) NSUInteger songIndex;
 @end
 
 
@@ -24,33 +29,85 @@ static playerManager *_musicManager = nil;
 
 // get manager instance
 + (playerManager *)musicManager {
-        if (!_musicManager) {
-            _musicManager = [[self alloc] init];
-            return _musicManager;
-        }
-    
+    if (!_musicManager) {
+        _musicManager = [[self alloc] init];
+        return _musicManager;
+    }
     return nil;
+}
+
+- (void)getLocalSongs {
+    NSMutableArray *modelList = [[NSMutableArray alloc] init];
+    MPMediaQuery *mediaQuery = [[MPMediaQuery alloc] init];
+    NSArray *itemsInMedia = [mediaQuery items];
+    for (MPMediaItem *item in itemsInMedia) {
+        NSString *songName = [item valueForProperty:MPMediaItemPropertyTitle];
+        NSString *singerName = [item valueForProperty:MPMediaItemPropertyArtist];
+        NSString *songURLString = [[item valueForProperty:MPMediaItemPropertyAssetURL] absoluteString];
+        NSURL *songURL = [NSURL URLWithString:songURLString];
+        NSString *lyric = [item valueForProperty:MPMediaItemPropertyLyrics];
+        UIImage *songArtWork = [[item valueForProperty:MPMediaItemPropertyArtwork] imageWithSize:CGSizeMake(350, 350)];
+        NSString *songAlbumName = [item valueForProperty:MPMediaItemPropertyAlbumTitle];
+        
+        songModel *song = [[songModel alloc] init];
+        song.songName = songName;
+        song.songMPArtWork = songArtWork;
+        song.singer = singerName;
+        song.songURL = songURL;
+        song.songAlbumName = songAlbumName;
+        song.lrcModel = [[lrcModel alloc] init];
+        [modelList addObject:song];
+        //        NSLog(@"title: %@", songName);
+        //        NSLog(@"songName: %@", singerName);
+        //        NSLog(@"songURL: %@", songURLString);
+        //        NSLog(@"songArtWork: %@", songArtWork);
+        //        NSLog(@"lyric: %@", lyric);
+    }
+    NSLog(@"songmodellist size: %lu", (unsigned long)[self.songModelList count]);
+    self.songModelList = modelList;
+    self.songIndex = 0;
 }
 
 // load the song
 - (songModel *) loadMusic:(NSString *)fileName {
-    NSURL *url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
-    if (url) {
-        _currentSongModel = [[songModel alloc] init];
-        _playerItem = [[AVPlayerItem alloc] initWithURL:url];
-        _player = [[AVPlayer alloc] initWithPlayerItem:_playerItem];
+    
+    //    self.songModelList = [fileFetcher querySongList];
+    //    NSDictionary *songData = [[self.songModelList objectAtIndex:0] objectForKey:@"data"];
+    //    NSString *songmid = [songData objectForKey:@"songmid"];
+    //    NSURL *url = [fileFetcher urlOfSongmid:songmid];
+    //    if (fileName) url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
+    
+    if ([self.songModelList count] > 0) {
+        songModel *song = [self.songModelList objectAtIndex:self.songIndex];
+        if (song) {
+            //        self.currentSongModel = [[songModel alloc] init];
+            //        self.currentSongModel.songmid = songmid;
+            //        self.currentSongModel.songName = [songData objectForKey:@"songname"];
+            //        self.currentSongModel.songAlbumName = [songData objectForKey:@"albumname"];
+            //        self.currentSongModel.singer = [[songData valueForKeyPath:@"singer.name"] firstObject];
+            //        if (fileName) self.currentSongModel.lrcName = fileName;
+            
+            NSURL *url = song.songURL;
+            if (url) {
+                self.playerItem = [[AVPlayerItem alloc] initWithURL:url];
+                self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
+                self.currentSongModel = song;
+            }
+        }
     }
-    return _currentSongModel;
+    return self.currentSongModel;
 }
 
 // Play the song
 - (Boolean) play:(NSString *)fileName {
     if (_player) {
         if ([_player rate] == 0) {
+            NSLog(@"manager, player rate 0");
             [[self player] play];
             return YES;
         }
         else {
+            NSLog(@"manager, player rate 1");
             [self pause];
             return NO;
         }
@@ -81,4 +138,14 @@ static playerManager *_musicManager = nil;
     return [self player];
 }
 
+- (void)nextSong {
+    [self didfinishPlaying];
+    self.songIndex == [self.songModelList count] - 1 ? self.songIndex = 0 : self.songIndex++;
+}
+
+- (void)lastSong {
+    [self didfinishPlaying];
+    self.songIndex == 0 ? self.songIndex = [self.songModelList count] - 1 : self.songIndex--;
+}
+//
 @end

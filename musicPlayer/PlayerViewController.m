@@ -70,11 +70,20 @@
     // lrc label setup
     [self setupLrcLabel];
     
-    // prepare for playing the song
-    [self prepareToPlay:@"泡沫-邓紫棋"];
-    
     // lyric scroll view setup
     [self setupLyricScrollView];
+    
+    // setup player manager
+    if (!_playerManager) _playerManager = [playerManager musicManager];
+    [_playerManager getLocalSongs];
+    [_playerManager loadMusic:nil];
+    
+    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
+    dispatch_async(downloadQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self prepareToPlay:nil];
+        });
+    });
     
     // when the app back to foreground add roatable image animation
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
@@ -128,28 +137,31 @@
 
 // set up current playing song
 - (void)prepareToPlay:(NSString *)fileName{
-    if (!_playerManager) _playerManager = [playerManager musicManager];
-    [_playerManager loadMusic:fileName];
+    songModel *song = [self.playerManager loadMusic:fileName];
+    // set title and singer
+    [self.singerLabel setText:song.singer];
+    [self.songNameLabel setText:song.songName];
     
     // setup lrc model
-    NSString *lrcFile = [NSString stringWithFormat:@"%@.lrc", fileName];
-    _currentLrcModel = [[lrcModel alloc] initWithFile:lrcFile];
-    [_singerLabel setText:[_currentLrcModel getSinger]];
-    [_songNameLabel setText:[_currentLrcModel getSongName]];
+    self.currentLrcModel = song.lrcModel;
+    // set data to be displayed on the lyric scroll view
+    [self.lyricScrollView setLrcArr:[self.currentLrcModel getLyricArr]];
+    // setup LRCLabel
+    [self.LRCLabel setText:[self.currentLrcModel lyricForTimeInSec:0.0]];
     
-    [self addLrcLabelTimer]; // add lrc timer to update LRC label
-    [_lyricScrollView setLrcArr:[_currentLrcModel getLyricArr]]; // set data to be displayed on the lyric scroll view
+    // set background image below the blur visual effect
+    [self.backGroundImageView setImage:song.songMPArtWork];
+    // set the rotatable image
+    [self.songImageView setImage:song.songMPArtWork];
     
-    [_backGroundImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]]; // set background image below the blur visual effect
-    [_songImageView setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.jpg", fileName]]]; // set the rotatable image
-    
+    // setup totalTimeLabel
     AVPlayerItem *currentPlayerItem = [[self playerManager] currentPlayerItem];
     Float64 totalTime = CMTimeGetSeconds([[currentPlayerItem asset] duration]);
     [[self totalTimeLabel] setText:[self stringForTime:totalTime]];
     
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
+    // add finish playing selector to current song
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[self.playerManager currentPlayerItem]];
     [self addSongImageViewAnimate];
-    [self play:[self playButton]];
 }
 
 // play or pause the song
@@ -174,12 +186,28 @@
 
 // play next song
 - (IBAction)nextSong:(UIButton *)sender {
-    [self prepareToPlay:@"最佳损友-陈奕迅"];
+    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
+    dispatch_async(downloadQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.playerManager nextSong];
+            //[self prepareToPlay:@"最佳损友-陈奕迅"];
+            [self prepareToPlay:nil];
+            [self play:self.playButton];
+        });
+    });
 }
 
 // play last song
 - (IBAction)lastSong:(UIButton *)sender {
-    [self prepareToPlay:@"泡沫-邓紫棋"];
+    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
+    dispatch_async(downloadQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.playerManager lastSong];
+            //[self prepareToPlay:@"泡沫-邓紫棋"];
+            [self prepareToPlay:nil];
+            [self play:self.playButton];
+        });
+    });
 }
 
 // update progress of the song
@@ -193,11 +221,11 @@
 // handle after finishing the song
 -(void)didFinishPlaying {
     if (debug) NSLog(@"PlayerViewController:finish playing");
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[_playerManager currentPlayerItem]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[self.playerManager currentPlayerItem]];
     [self removeSliderTimer];
     [self removeLrcLabelTimer];
     
-    [_playerManager didfinishPlaying];
+    [self.playerManager didfinishPlaying];
     [[self currentTimeLabel] setText:[self stringForTime:0.0]];
     [[self songSlider] setValue:0.0];
     [[self playButton] setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
@@ -293,6 +321,7 @@
     [rotateAnimation setDuration:30];
     [rotateAnimation setRepeatCount:MAXFLOAT];
     [[_songImageView layer] addAnimation:rotateAnimation forKey:nil];
+    [[_songImageView layer] setSpeed:0.0];
 }
 
 // pause the song image view
@@ -407,8 +436,8 @@
 
 - (void)setupNowPlaying {
     NSMutableDictionary *playingInfo = [[NSMutableDictionary alloc] init];
-    [playingInfo setObject:self.songNameLabel.text forKey:MPMediaItemPropertyTitle]; // set song name
-    [playingInfo setObject:self.singerLabel.text forKey:MPMediaItemPropertyArtist]; // set singer name
+    if (self.songNameLabel.text) [playingInfo setObject:self.songNameLabel.text forKey:MPMediaItemPropertyTitle]; // set song name
+    if (self.singerLabel.text) [playingInfo setObject:self.singerLabel.text forKey:MPMediaItemPropertyArtist]; // set singer name
     NSNumber *totalTime = [NSNumber numberWithFloat:CMTimeGetSeconds([[self.playerManager currentPlayerItem] asset].duration)];
     NSNumber *elapsedTime = [NSNumber numberWithFloat:CMTimeGetSeconds([[self.playerManager currentPlayerItem] currentTime])];
     [playingInfo setObject:totalTime forKey:MPMediaItemPropertyPlaybackDuration]; // set total time
