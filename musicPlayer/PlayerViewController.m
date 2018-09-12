@@ -13,6 +13,7 @@
 #import "lrcModel.h"
 #import "lyricScrollView.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "SongListTableViewController.h"
 
 #define debug true
 
@@ -35,14 +36,15 @@
 // lyric scroll view
 @property (strong, nonatomic) IBOutlet lyricScrollView *lyricScrollView;
 
-
 // player control
+@property (weak, nonatomic) IBOutlet UIButton *randomButton;
 @property (weak, nonatomic) IBOutlet UIButton *lastSongButton;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextSongButton;
 @property (weak, nonatomic) IBOutlet UISlider *songSlider;
 @property (weak, nonatomic) IBOutlet UILabel *currentTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalTimeLabel;
+@property (weak, nonatomic) IBOutlet UIButton *songListButton;
 
 // player model
 @property (strong, nonatomic) playerManager *playerManager;
@@ -87,6 +89,10 @@
     
     // when the app back to foreground add roatable image animation
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
+    // when app back to foreground refresh UI
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
+    // when interrupt occurs
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interruptHandle:) name:AVAudioSessionInterruptionNotification object:[UIApplication sharedApplication]];
     
     // enable recieving remote control events
     [self setupRemoteControl];
@@ -126,6 +132,16 @@
     return UIStatusBarStyleLightContent;
 }
 
+// refresh UI
+- (void)refreshUI {
+    if ([[self.playerManager currentPlayer] rate] == 0) {
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    }
+    else if ([[self.playerManager currentPlayer] rate] == 1) {
+        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    }
+}
+
 #pragma songManager
 // get time in string format as "01:01"
 - (NSString *)stringForTime:(Float64)time {
@@ -160,7 +176,7 @@
     [[self totalTimeLabel] setText:[self stringForTime:totalTime]];
     
     // add finish playing selector to current song
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[self.playerManager currentPlayerItem]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishPlaying) name:AVPlayerItemDidPlayToEndTimeNotification object:[self.playerManager currentPlayerItem]];
     [self addSongImageViewAnimate];
 }
 
@@ -179,7 +195,7 @@
             [self removeSliderTimer];
             [self removeLrcLabelTimer];
             [self pauseSongImageViewAnimate];
-            [sender  setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+            [sender setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         }
     }
 }
@@ -189,6 +205,7 @@
     dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
     dispatch_async(downloadQueue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self removeTimersAndObservers];
             [self.playerManager nextSong];
             //[self prepareToPlay:@"最佳损友-陈奕迅"];
             [self prepareToPlay:nil];
@@ -202,12 +219,36 @@
     dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
     dispatch_async(downloadQueue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self removeTimersAndObservers];
             [self.playerManager lastSong];
             //[self prepareToPlay:@"泡沫-邓紫棋"];
             [self prepareToPlay:nil];
             [self play:self.playButton];
         });
     });
+}
+
+// random play
+- (IBAction)randomSong:(UIButton *)sender {
+    if ([self.playerManager enableRandomSong]) {
+        [sender setImage:[UIImage imageNamed:@"random"] forState:UIControlStateNormal];
+    }
+    else {
+        [sender setImage:[UIImage imageNamed:@"order"] forState:UIControlStateNormal];
+    }
+}
+
+// song list button pressed
+- (IBAction)songListButtonPressed:(UIButton *)sender {
+    NSLog(@"song list button pressed");
+    //UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *songListTableVC = [[SongListTableViewController alloc] init];
+    [songListTableVC setModalPresentationStyle:UIModalPresentationCustom];
+    
+    [self presentViewController:songListTableVC animated:YES completion:^{
+        NSLog(@"present songList");
+        [(SongListTableViewController *)songListTableVC setSongModelList:[self.playerManager getSongModelList]];
+    }];
 }
 
 // update progress of the song
@@ -218,9 +259,8 @@
     [[[self playerManager] currentPlayer] seekToTime:CMTimeMake(newTime, 1)];
 }
 
-// handle after finishing the song
--(void)didFinishPlaying {
-    if (debug) NSLog(@"PlayerViewController:finish playing");
+// remove all timers appropriately
+- (void)removeTimersAndObservers {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[self.playerManager currentPlayerItem]];
     [self removeSliderTimer];
     [self removeLrcLabelTimer];
@@ -228,6 +268,12 @@
     [self.playerManager didfinishPlaying];
     [[self currentTimeLabel] setText:[self stringForTime:0.0]];
     [[self songSlider] setValue:0.0];
+}
+
+// handle after finishing the song
+-(void)didFinishPlaying {
+    if (debug) NSLog(@"PlayerViewController:finish playing");
+    [self removeTimersAndObservers];
     [[self playButton] setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [self nextSong:[self nextSongButton]];
 }
@@ -307,6 +353,7 @@
 - (void)songImageViewSetup {
     [[self.songImageView layer] setCornerRadius:[self.songImageView bounds].size.height * 0.5];
     [[self.songImageView layer] setMasksToBounds:YES];
+    [self.songImageView setBackgroundColor:[UIColor clearColor]];
     
     [[_songImageView layer] setBorderColor:[[UIColor grayColor] CGColor]];
     [[_songImageView layer] setBorderWidth:5.0];
@@ -321,7 +368,7 @@
     [rotateAnimation setDuration:30];
     [rotateAnimation setRepeatCount:MAXFLOAT];
     [[_songImageView layer] addAnimation:rotateAnimation forKey:nil];
-    [[_songImageView layer] setSpeed:0.0];
+    if ([[self.playerManager currentPlayer] rate] == 0) [[_songImageView layer] setSpeed:0.0];
 }
 
 // pause the song image view
@@ -443,5 +490,14 @@
     [playingInfo setObject:totalTime forKey:MPMediaItemPropertyPlaybackDuration]; // set total time
     [playingInfo setObject:elapsedTime forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime]; // set elapsed time
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:playingInfo];
+}
+
+- (void)interruptHandle:(NSNotification *)notification {
+    NSDictionary *interruptInfo = notification.userInfo;
+    NSNumber *interruptType = [interruptInfo objectForKey:AVAudioSessionInterruptionTypeKey];
+    if (interruptType.intValue == AVAudioSessionInterruptionTypeBegan || interruptType.intValue == AVAudioSessionInterruptionTypeEnded) {
+        NSLog(@"interrupt begin or end");
+        [self play:self.playButton];
+    }
 }
 @end

@@ -12,18 +12,17 @@
 @class songModel;
 
 @interface playerManager : NSObject
-@property (nonatomic,strong) AVPlayer *player;
-@property (nonatomic,strong) AVPlayerItem *playerItem;
-
 + (playerManager *)musicManager;
 - (Boolean) play: (NSString *)fileName;
 - (void) pause;
 - (AVPlayerItem *) currentPlayerItem;
-- (void) didfinishPlaying;
 - (AVPlayer *) currentPlayer;
+- (void) didfinishPlaying;
 - (songModel *) loadMusic:(NSString *)fileName;
 - (void)getLocalSongs;
 - (void)nextSong;
 - (void)lastSong;
+- (BOOL)enableRandomSong;
+- (NSArray *)getSongModelList;
 @end
 

@@ -15,9 +15,12 @@
 #import "lrcModel.h"
 
 @interface playerManager ()
+@property (nonatomic,strong) AVPlayer *player;
+@property (nonatomic,strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) songModel *currentSongModel;
 @property (nonatomic, strong) NSArray *songModelList;
 @property (nonatomic, assign) NSUInteger songIndex;
+@property (nonatomic, assign) BOOL random;
 @end
 
 
@@ -31,6 +34,8 @@ static playerManager *_musicManager = nil;
 + (playerManager *)musicManager {
     if (!_musicManager) {
         _musicManager = [[self alloc] init];
+        _musicManager.songIndex = 0;
+        _musicManager.random = NO;
         return _musicManager;
     }
     return nil;
@@ -63,9 +68,7 @@ static playerManager *_musicManager = nil;
         //        NSLog(@"songArtWork: %@", songArtWork);
         //        NSLog(@"lyric: %@", lyric);
     }
-    NSLog(@"songmodellist size: %lu", (unsigned long)[self.songModelList count]);
     self.songModelList = modelList;
-    self.songIndex = 0;
 }
 
 // load the song
@@ -122,30 +125,52 @@ static playerManager *_musicManager = nil;
     [_player pause];
 }
 
-// get current playing playerItem
-- (AVPlayerItem *) currentPlayerItem {
-    return [self playerItem];
-}
-
 // handle after finishing the song
 - (void) didfinishPlaying {
     _playerItem = nil;
     _player = nil;
 }
 
+// play next song
+- (void)nextSong {
+    [self didfinishPlaying];
+    if (self.random) {
+        self.songIndex = random() % [self.songModelList count];
+    }
+    else {
+        self.songIndex == [self.songModelList count] - 1 ? self.songIndex = 0 : self.songIndex++;
+    }
+}
+
+// play last song
+- (void)lastSong {
+    [self didfinishPlaying];
+    if (self.random) {
+        self.songIndex = random() % [self.songModelList count];
+    }
+    else {
+        self.songIndex == 0 ? self.songIndex = [self.songModelList count] - 1 : self.songIndex--;
+    }
+}
+
+// random song
+- (BOOL)enableRandomSong {
+    self.random = !self.random;
+    return self.random;
+}
+
+# pragma getters
 // get current playing player
 - (AVPlayer *) currentPlayer {
     return [self player];
 }
 
-- (void)nextSong {
-    [self didfinishPlaying];
-    self.songIndex == [self.songModelList count] - 1 ? self.songIndex = 0 : self.songIndex++;
+// get current playing playerItem
+- (AVPlayerItem *) currentPlayerItem {
+    return [self playerItem];
 }
 
-- (void)lastSong {
-    [self didfinishPlaying];
-    self.songIndex == 0 ? self.songIndex = [self.songModelList count] - 1 : self.songIndex--;
+- (NSArray *)getSongModelList {
+    return self.songModelList;
 }
-//
 @end
