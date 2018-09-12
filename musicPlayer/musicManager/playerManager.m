@@ -105,12 +105,12 @@ static playerManager *_musicManager = nil;
 - (Boolean) play:(NSString *)fileName {
     if (_player) {
         if ([_player rate] == 0) {
-            NSLog(@"manager, player rate 0");
+            NSLog(@"manager, player rate 1");
             [[self player] play];
             return YES;
         }
         else {
-            NSLog(@"manager, player rate 1");
+            NSLog(@"manager, player rate 0");
             [self pause];
             return NO;
         }
@@ -173,4 +173,9 @@ static playerManager *_musicManager = nil;
 - (NSArray *)getSongModelList {
     return self.songModelList;
 }
+
+- (void)setSongIndex:(NSUInteger)songIndex {
+    if (_songIndex != songIndex) _songIndex = songIndex;
+}
+
 @end

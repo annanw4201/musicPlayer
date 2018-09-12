@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol songListTableViewDelegate <NSObject>
+- (void)setToSongIndex: (NSInteger)index;
+@end
 
 @interface SongListTableViewController : UIViewController
 - (void)setSongModelList:(NSArray *)songModelList;
+@property (nonatomic, weak)id<songListTableViewDelegate>delegate;
 @end

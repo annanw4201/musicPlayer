@@ -17,7 +17,7 @@
 
 #define debug true
 
-@interface PlayerViewController () <UIScrollViewDelegate>
+@interface PlayerViewController () <UIScrollViewDelegate, songListTableViewDelegate>
 // back ground image
 @property (weak, nonatomic) IBOutlet UIImageView *backGroundImageView;
 
@@ -243,11 +243,10 @@
     NSLog(@"song list button pressed");
     //UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UIViewController *songListTableVC = [[SongListTableViewController alloc] init];
-    [songListTableVC setModalPresentationStyle:UIModalPresentationCustom];
-    
     [self presentViewController:songListTableVC animated:YES completion:^{
         NSLog(@"present songList");
         [(SongListTableViewController *)songListTableVC setSongModelList:[self.playerManager getSongModelList]];
+        ((SongListTableViewController *)songListTableVC).delegate = self;
     }];
 }
 
@@ -499,5 +498,13 @@
         NSLog(@"interrupt begin or end");
         [self play:self.playButton];
     }
+}
+
+# pragma songListTableViewDelegate
+- (void)setToSongIndex:(NSInteger)index {
+    [self removeTimersAndObservers];
+    [self.playerManager setSongIndex:index];
+    [self prepareToPlay:nil];
+    [self play:self.playButton];
 }
 @end

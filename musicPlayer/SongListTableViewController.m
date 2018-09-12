@@ -8,8 +8,9 @@
 
 #import "SongListTableViewController.h"
 #import "songModel.h"
+#import "playerManager.h"
 
-@interface SongListTableViewController () <UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITableViewDataSource>
+@interface SongListTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)NSArray *songModelList;
 @property (nonatomic, weak)UITableView *tableView;
 @end
@@ -19,14 +20,30 @@
 - (id)init {
     self = [super init];
     if (self) {
-        [self.view setAlpha:0.7];
-        UITableView *view = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        [self.view setAlpha:0.85];
         [self setModalPresentationStyle:UIModalPresentationCustom];
-        [view setDataSource:self];
-        NSLog(@"init:%@", view);
-        self.tableView = view;
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        UITableView *songListView = [[UITableView alloc] initWithFrame:CGRectMake(0, screenBounds.size.height * 0.5, screenBounds.size.width, screenBounds.size.height * 0.5)];
+        [songListView registerClass:[UITableViewCell self] forCellReuseIdentifier:@"songListCell"];
+        [songListView setBackgroundColor:[UIColor lightGrayColor]];
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height)];
+        [backgroundView setBackgroundColor:[UIColor clearColor]];
+        UITapGestureRecognizer *tapOnBackGroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss:)];
+        [backgroundView addGestureRecognizer:tapOnBackGroundView];
+        
+        
+        [songListView setDataSource:self];
+        [songListView setDelegate:self];
+        self.tableView = songListView;
+        [[self view] addSubview:backgroundView];
+        [[self view] addSubview:self.tableView];
     }
     return self;
+}
+
+- (void)dismiss:(UITapGestureRecognizer *)sender {
+    if (self) [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLoad {
@@ -38,13 +55,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    //[self.view setBackgroundColor:[UIColor clearColor]];
-    //[[self.tableView.heightAnchor constraintEqualToConstant:UIScreen.mainScreen.bounds.size.height * 0.5] setActive:YES];
-    //    [[self.tableView.bottomAnchor constraintEqualToAnchor:self.tableView.bottomAnchor] setActive:YES];
-    //    [[self.tableView.leadingAnchor constraintEqualToAnchor:self.tableView.leadingAnchor] setActive:YES];
-    //    [[self.tableView.trailingAnchor constraintEqualToAnchor:self.tableView.trailingAnchor] setActive:YES];
-    //[self.tableView setBackgroundColor:[UIColor clearColor]];
-    [self setTransitioningDelegate:self];
+    [self.view setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,7 +64,6 @@
 }
 
 - (void)setSongModelList:(NSArray *)songModelList {
-    NSLog(@"songModelListSize: %lu", (unsigned long)[songModelList count]);
     _songModelList = songModelList;
     [self.tableView reloadData];
 }
@@ -70,8 +80,8 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"songListCell" forIndexPath:indexPath];
     
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"songListCell" forIndexPath:indexPath];
     // Configure the cell...
     [cell setBackgroundColor:[UIColor clearColor]];
     songModel *song = [self.songModelList objectAtIndex:[indexPath row]];
@@ -79,6 +89,11 @@
     [cell.detailTextLabel setText:song.singer];
     
     return cell;
+}
+
+- (void)tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
+    NSLog(@"tap on row: %ld", (long)[indexPath row]);
+    [self.delegate setToSongIndex:[indexPath row]];
 }
 
 /*
@@ -124,29 +139,5 @@
  // Pass the selected object to the new view controller.
  }
  */
-
-#pragma transitionDelegate
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    return self;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    return self;
-}
-
-- (NSTimeInterval)transitionDuration:(nullable id<UIViewControllerContextTransitioning>)transitionContext {
-    return 1;
-}
-
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    UIView *containerView = transitionContext.containerView;
-    UIView *toView = [transitionContext viewForKey:UITransitionContextToViewControllerKey];
-
-        NSLog(@"container: %@", containerView);
-        NSLog(@"toview: %@", toView);
-        [containerView addSubview:self.tableView];
-    
-    
-}
 
 @end

@@ -24,5 +24,6 @@
 - (void)lastSong;
 - (BOOL)enableRandomSong;
 - (NSArray *)getSongModelList;
+- (void)setSongIndex:(NSUInteger)songIndex;
 @end
 
