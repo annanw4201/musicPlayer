@@ -157,6 +157,7 @@
 // set up current playing song
 - (void)prepareToPlay:(NSString *)fileName{
     songModel *song = [self.playerManager loadMusic:fileName];
+    if (!song) song = [[songModel alloc] init];
     // set title and singer
     [self.singerLabel setText:song.singer];
     [self.songNameLabel setText:song.songName];

@@ -55,20 +55,20 @@ static playerManager *_musicManager = nil;
         NSString *songAlbumName = [item valueForProperty:MPMediaItemPropertyAlbumTitle];
         
         songModel *song = [[songModel alloc] init];
-        song.songName = songName;
-        song.songMPArtWork = songArtWork;
-        song.singer = singerName;
+        song.songName = songName ? songName : song.songName;
+        song.singer = singerName ? singerName : song.singer;
+        song.songAlbumName = songAlbumName ? songAlbumName : song.songAlbumName;
         song.songURL = songURL;
-        song.songAlbumName = songAlbumName;
+        song.songMPArtWork = songArtWork;
         song.lrcModel = [[lrcModel alloc] init];
         [modelList addObject:song];
-        //        NSLog(@"title: %@", songName);
-        //        NSLog(@"songName: %@", singerName);
-        //        NSLog(@"songURL: %@", songURLString);
-        //        NSLog(@"songArtWork: %@", songArtWork);
-        //        NSLog(@"lyric: %@", lyric);
+//        NSLog(@"title: %@", songName);
+//        NSLog(@"songName: %@", singerName);
+//        NSLog(@"songURL: %@", songURLString);
+//        NSLog(@"songArtWork: %@", songArtWork);
+//        NSLog(@"lyric: %@", lyric);
     }
-    self.songModelList = modelList;
+    if ([modelList count] > 0) self.songModelList = modelList;
 }
 
 // load the song
@@ -135,7 +135,7 @@ static playerManager *_musicManager = nil;
 - (void)nextSong {
     [self didfinishPlaying];
     if (self.random) {
-        self.songIndex = random() % [self.songModelList count];
+        self.songIndex = arc4random_uniform((unsigned int)[self.songModelList count]);
     }
     else {
         self.songIndex == [self.songModelList count] - 1 ? self.songIndex = 0 : self.songIndex++;
@@ -146,7 +146,7 @@ static playerManager *_musicManager = nil;
 - (void)lastSong {
     [self didfinishPlaying];
     if (self.random) {
-        self.songIndex = random() % [self.songModelList count];
+        self.songIndex = arc4random_uniform((unsigned int)[self.songModelList count]);
     }
     else {
         self.songIndex == 0 ? self.songIndex = [self.songModelList count] - 1 : self.songIndex--;

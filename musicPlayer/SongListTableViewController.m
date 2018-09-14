@@ -68,7 +68,7 @@
     NSLog(@"update table vc");
     [self.tableView reloadData];
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.songListDelegate getSongIndex] inSection:0];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    if ([self.songModelList count] > 0) [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 - (void)setSongModelList:(NSArray *)songModelList {
