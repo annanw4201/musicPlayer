@@ -28,6 +28,7 @@
 		CE092BEE213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */; };
 		CE092BF0213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */; };
 		CE2F690E21478E0500F265BC /* SongListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2F690D21478E0500F265BC /* SongListTableViewController.m */; };
+		CEBBB15E214AD35200F081C2 /* songListCellNib.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEBBB15D214AD35200F081C2 /* songListCellNib.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "最佳损友-陈奕迅.jpg"; sourceTree = "<group>"; };
 		CE2F690C21478E0500F265BC /* SongListTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongListTableViewController.h; sourceTree = "<group>"; };
 		CE2F690D21478E0500F265BC /* SongListTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SongListTableViewController.m; sourceTree = "<group>"; };
+		CEBBB15D214AD35200F081C2 /* songListCellNib.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = songListCellNib.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 				CE092B92212E5E0700E9FF26 /* Main.storyboard */,
 				CE092B98212E5E0800E9FF26 /* Assets.xcassets */,
 				CE092B9A212E5E0800E9FF26 /* LaunchScreen.storyboard */,
+				CEBBB15D214AD35200F081C2 /* songListCellNib.xib */,
 				CE092B9D212E5E0800E9FF26 /* Info.plist */,
 				CE092B9E212E5E0800E9FF26 /* main.m */,
 				CE092B95212E5E0700E9FF26 /* musicPlayer.xcdatamodeld */,
@@ -349,6 +352,7 @@
 				CE092BCA21311FEB00E9FF26 /* 泡沫-邓紫棋.lrc in Resources */,
 				CE092BC421311F6100E9FF26 /* 泡沫-邓紫棋.jpg in Resources */,
 				CE092BC721311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 in Resources */,
+				CEBBB15E214AD35200F081C2 /* songListCellNib.xib in Resources */,
 				CE092BEE213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 in Resources */,
 				CE092B94212E5E0700E9FF26 /* Main.storyboard in Resources */,
 			);

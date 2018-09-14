@@ -159,6 +159,11 @@ static playerManager *_musicManager = nil;
     return self.random;
 }
 
+// set the song index
+- (void)setSongIndex:(NSUInteger)songIndex {
+    if (_songIndex != songIndex) _songIndex = songIndex;
+}
+
 # pragma getters
 // get current playing player
 - (AVPlayer *) currentPlayer {
@@ -174,8 +179,8 @@ static playerManager *_musicManager = nil;
     return self.songModelList;
 }
 
-- (void)setSongIndex:(NSUInteger)songIndex {
-    if (_songIndex != songIndex) _songIndex = songIndex;
+- (NSInteger)getSongIndex {
+    return self.songIndex;
 }
 
 @end

@@ -12,7 +12,7 @@
 
 @interface SongListTableViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong)NSArray *songModelList;
-@property (nonatomic, weak)UITableView *tableView;
+@property (nonatomic, strong)UITableView *tableView;
 @end
 
 @implementation SongListTableViewController
@@ -24,8 +24,9 @@
         [self setModalPresentationStyle:UIModalPresentationCustom];
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         UITableView *songListView = [[UITableView alloc] initWithFrame:CGRectMake(0, screenBounds.size.height * 0.5, screenBounds.size.width, screenBounds.size.height * 0.5)];
-        [songListView registerClass:[UITableViewCell self] forCellReuseIdentifier:@"songListCell"];
-        [songListView setBackgroundColor:[UIColor lightGrayColor]];
+        [songListView registerNib:[UINib nibWithNibName:@"songListCellNib" bundle:nil] forCellReuseIdentifier:@"songListCell"];
+        //[songListView registerClass:[UITableViewCell self] forCellReuseIdentifier:@"songListCell"];
+        [songListView setBackgroundColor:[UIColor darkGrayColor]];
         
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height)];
         [backgroundView setBackgroundColor:[UIColor clearColor]];
@@ -63,9 +64,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)update {
+    NSLog(@"update table vc");
+    [self.tableView reloadData];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.songListDelegate getSongIndex] inSection:0];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
+
 - (void)setSongModelList:(NSArray *)songModelList {
     _songModelList = songModelList;
-    [self.tableView reloadData];
+    [self update];
 }
 
 #pragma mark - Table view data source
@@ -85,15 +93,36 @@
     // Configure the cell...
     [cell setBackgroundColor:[UIColor clearColor]];
     songModel *song = [self.songModelList objectAtIndex:[indexPath row]];
+    [cell.textLabel setTextColor:[UIColor whiteColor]];
+    [cell.detailTextLabel setTextColor:[UIColor whiteColor]];
     [cell.textLabel setText:song.songName];
     [cell.detailTextLabel setText:song.singer];
-    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    if (self.songListDelegate.getSongIndex == [indexPath row]) {
+        [cell.detailTextLabel setTextColor:[UIColor blackColor]];
+        [cell.textLabel setTextColor:[UIColor blackColor]];
+        [cell setBackgroundColor:[UIColor lightGrayColor]];
+    }
     return cell;
 }
 
 - (void)tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
     NSLog(@"tap on row: %ld", (long)[indexPath row]);
-    [self.delegate setToSongIndex:[indexPath row]];
+    // resume state of previous selected cell
+    NSIndexPath *preSelectedCellIndexPath = [NSIndexPath indexPathForItem:[self.songListDelegate getSongIndex] inSection:0];
+    UITableViewCell *preSelectedCell = [self.tableView cellForRowAtIndexPath:preSelectedCellIndexPath];
+    [preSelectedCell.textLabel setTextColor:[UIColor whiteColor]];
+    [preSelectedCell.detailTextLabel setTextColor:[UIColor whiteColor]];
+    [preSelectedCell setBackgroundColor:[UIColor clearColor]];
+    
+    // send current selected cell to playerViewController delegate for playing
+    [self.songListDelegate setToSongIndex:[indexPath row]];
+    
+    // update new selected cell state
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
+    [cell.detailTextLabel setTextColor:[UIColor blackColor]];
+    [cell setBackgroundColor:[UIColor lightGrayColor]];
 }
 
 /*

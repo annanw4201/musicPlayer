@@ -53,6 +53,9 @@
 // timer
 @property (strong, nonatomic) NSTimer *songSliderTimer;
 @property (nonatomic, strong) CADisplayLink *lrcLabelTimer;
+
+// songListTableView
+@property (nonatomic, weak) SongListTableViewController *songListVC;
 @end
 
 @implementation PlayerViewController
@@ -210,6 +213,7 @@
             //[self prepareToPlay:@"最佳损友-陈奕迅"];
             [self prepareToPlay:nil];
             [self play:self.playButton];
+            [self.songListVC update];
         });
     });
 }
@@ -224,6 +228,7 @@
             //[self prepareToPlay:@"泡沫-邓紫棋"];
             [self prepareToPlay:nil];
             [self play:self.playButton];
+            [self.songListVC update];
         });
     });
 }
@@ -241,13 +246,16 @@
 // song list button pressed
 - (IBAction)songListButtonPressed:(UIButton *)sender {
     NSLog(@"song list button pressed");
-    //UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *songListTableVC = [[SongListTableViewController alloc] init];
-    [self presentViewController:songListTableVC animated:YES completion:^{
-        NSLog(@"present songList");
-        [(SongListTableViewController *)songListTableVC setSongModelList:[self.playerManager getSongModelList]];
-        ((SongListTableViewController *)songListTableVC).delegate = self;
-    }];
+    if (!self.songListVC) {
+        NSLog(@"create songList");
+        SongListTableViewController *songListTableVC = [[SongListTableViewController alloc] init];
+        self.songListVC = songListTableVC;
+        [self presentViewController:songListTableVC animated:YES completion:^{
+            NSLog(@"present songList");
+            self.songListVC.songListDelegate = self;
+            [self.songListVC setSongModelList:[self.playerManager getSongModelList]];
+        }];
+    }
 }
 
 // update progress of the song
@@ -263,6 +271,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:[self.playerManager currentPlayerItem]];
     [self removeSliderTimer];
     [self removeLrcLabelTimer];
+    [self.songImageView.layer removeAnimationForKey:@"rotateAnimate"];
     
     [self.playerManager didfinishPlaying];
     [[self currentTimeLabel] setText:[self stringForTime:0.0]];
@@ -366,7 +375,7 @@
     [rotateAnimation setToValue:[NSNumber numberWithFloat:M_PI * 2]];
     [rotateAnimation setDuration:30];
     [rotateAnimation setRepeatCount:MAXFLOAT];
-    [[_songImageView layer] addAnimation:rotateAnimation forKey:nil];
+    [[_songImageView layer] addAnimation:rotateAnimation forKey:@"rotateAnimate"];
     if ([[self.playerManager currentPlayer] rate] == 0) [[_songImageView layer] setSpeed:0.0];
 }
 
@@ -507,4 +516,9 @@
     [self prepareToPlay:nil];
     [self play:self.playButton];
 }
+
+- (NSInteger)getSongIndex {
+    return [self.playerManager getSongIndex];
+}
+
 @end
