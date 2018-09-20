@@ -60,36 +60,17 @@ static playerManager *_musicManager = nil;
         song.songAlbumName = songAlbumName ? songAlbumName : song.songAlbumName;
         song.songURL = songURL;
         song.songMPArtWork = songArtWork;
-        song.lrcModel = [[lrcModel alloc] init];
+        song.lrcModel = [[lrcModel alloc] initWithFile:lyric];
         [modelList addObject:song];
-//        NSLog(@"title: %@", songName);
-//        NSLog(@"songName: %@", singerName);
-//        NSLog(@"songURL: %@", songURLString);
-//        NSLog(@"songArtWork: %@", songArtWork);
-//        NSLog(@"lyric: %@", lyric);
     }
     if ([modelList count] > 0) self.songModelList = modelList;
 }
 
 // load the song
 - (songModel *) loadMusic:(NSString *)fileName {
-    
-    //    self.songModelList = [fileFetcher querySongList];
-    //    NSDictionary *songData = [[self.songModelList objectAtIndex:0] objectForKey:@"data"];
-    //    NSString *songmid = [songData objectForKey:@"songmid"];
-    //    NSURL *url = [fileFetcher urlOfSongmid:songmid];
-    //    if (fileName) url = [[NSBundle mainBundle] URLForResource:fileName withExtension:@".mp3"];
-    
     if ([self.songModelList count] > 0) {
         songModel *song = [self.songModelList objectAtIndex:self.songIndex];
         if (song) {
-            //        self.currentSongModel = [[songModel alloc] init];
-            //        self.currentSongModel.songmid = songmid;
-            //        self.currentSongModel.songName = [songData objectForKey:@"songname"];
-            //        self.currentSongModel.songAlbumName = [songData objectForKey:@"albumname"];
-            //        self.currentSongModel.singer = [[songData valueForKeyPath:@"singer.name"] firstObject];
-            //        if (fileName) self.currentSongModel.lrcName = fileName;
-            
             NSURL *url = song.songURL;
             if (url) {
                 self.playerItem = [[AVPlayerItem alloc] initWithURL:url];

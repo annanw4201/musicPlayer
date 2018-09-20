@@ -15,7 +15,7 @@
 @property (nonatomic, copy) NSString *songName;
 @property (nonatomic, copy) NSString *singer;
 @property (nonatomic, copy) NSString *songAlbumName;
-@property (nonatomic, strong) UIImage *songMPArtWork;
+@property (nonatomic, copy) UIImage *songMPArtWork;
 @property (nonatomic, copy) NSURL *songURL;
 @property (nonatomic, strong)lrcModel *lrcModel;
 @end

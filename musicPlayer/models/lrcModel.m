@@ -43,6 +43,8 @@
         _albumName = @"Unknown Album";
         _currentLyric = @"No Lyric";
         _currentTimeIndex = 0;
+        _timeArr = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithFloat:0.0], nil];
+        _lyricArr = [[NSMutableArray alloc] initWithObjects:@"No Lyric", nil];
         [self setupWithFile:fileName];
     }
     return self;
@@ -70,7 +72,7 @@
     
     NSString *lrcPath = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
     NSString *lrcStr = [NSString stringWithContentsOfFile:lrcPath encoding:NSUTF8StringEncoding error:nil];
-    
+    if (!lrcStr) return;
     NSArray *lrcArr = [lrcStr componentsSeparatedByString:@"\n"];
     if (debug) NSLog(@"%@", lrcStr);
     for (NSString *line in lrcArr) {

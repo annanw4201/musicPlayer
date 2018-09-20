@@ -13,11 +13,10 @@
 #import "lrcModel.h"
 #import "lyricScrollView.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "SongListTableViewController.h"
 
 #define debug true
 
-@interface PlayerViewController () <UIScrollViewDelegate, songListTableViewDelegate>
+@interface PlayerViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 // back ground image
 @property (weak, nonatomic) IBOutlet UIImageView *backGroundImageView;
 
@@ -28,13 +27,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *songNameLabel;
 
 // song image view
-@property (strong, nonatomic) IBOutlet UIImageView *songImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *songImageView;
 
 // LRC label
 @property (weak, nonatomic) IBOutlet UILabel *LRCLabel;
 
 // lyric scroll view
-@property (strong, nonatomic) IBOutlet lyricScrollView *lyricScrollView;
+@property (weak, nonatomic) IBOutlet lyricScrollView *lyricScrollView;
 
 // player control
 @property (weak, nonatomic) IBOutlet UIButton *randomButton;
@@ -47,19 +46,20 @@
 @property (weak, nonatomic) IBOutlet UIButton *songListButton;
 
 // player model
-@property (strong, nonatomic) playerManager *playerManager;
-@property (nonatomic, strong) lrcModel *currentLrcModel;
+@property (weak, nonatomic) playerManager *playerManager;
+@property (weak, nonatomic) lrcModel *currentLrcModel;
 
 // timer
-@property (strong, nonatomic) NSTimer *songSliderTimer;
-@property (nonatomic, strong) CADisplayLink *lrcLabelTimer;
+@property (weak, nonatomic) NSTimer *songSliderTimer;
+@property (weak, nonatomic) CADisplayLink *lrcLabelTimer;
 
 // songListTableView
-@property (nonatomic, weak) SongListTableViewController *songListVC;
+@property (weak, nonatomic) UIView *songModelListBackgroundView;
+@property (weak, nonatomic) UITableView *songModelListTableView;
+@property (weak, nonatomic)NSArray *songModelListArray;
 @end
 
 @implementation PlayerViewController
-@synthesize playerManager = _playerManager;
 
 - (void)viewDidLoad {
     if (debug) NSLog(@"PlayerViewController:view did load");
@@ -79,9 +79,10 @@
     [self setupLyricScrollView];
     
     // setup player manager
-    if (!_playerManager) _playerManager = [playerManager musicManager];
-    [_playerManager getLocalSongs];
-    [_playerManager loadMusic:nil];
+    if (!self.playerManager) self.playerManager = [playerManager musicManager];
+    [self.playerManager getLocalSongs];
+    [self.playerManager loadMusic:nil];
+    self.songModelListArray = [self.playerManager getSongModelList];
     
     dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
     dispatch_async(downloadQueue, ^{
@@ -214,7 +215,7 @@
             //[self prepareToPlay:@"最佳损友-陈奕迅"];
             [self prepareToPlay:nil];
             [self play:self.playButton];
-            [self.songListVC update];
+            [self updateSongModelListTableView];
         });
     });
 }
@@ -229,7 +230,7 @@
             //[self prepareToPlay:@"泡沫-邓紫棋"];
             [self prepareToPlay:nil];
             [self play:self.playButton];
-            [self.songListVC update];
+            [self updateSongModelListTableView];
         });
     });
 }
@@ -241,21 +242,6 @@
     }
     else {
         [sender setImage:[UIImage imageNamed:@"order"] forState:UIControlStateNormal];
-    }
-}
-
-// song list button pressed
-- (IBAction)songListButtonPressed:(UIButton *)sender {
-    NSLog(@"song list button pressed");
-    if (!self.songListVC) {
-        NSLog(@"create songList");
-        SongListTableViewController *songListTableVC = [[SongListTableViewController alloc] init];
-        self.songListVC = songListTableVC;
-        [self presentViewController:songListTableVC animated:YES completion:^{
-            NSLog(@"present songList");
-            self.songListVC.songListDelegate = self;
-            [self.songListVC setSongModelList:[self.playerManager getSongModelList]];
-        }];
     }
 }
 
@@ -285,6 +271,62 @@
     [self removeTimersAndObservers];
     [[self playButton] setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [self nextSong:[self nextSongButton]];
+}
+
+#pragma songList
+// update songList when necessary
+- (void)updateSongModelListTableView {
+    NSLog(@"update table vc");
+    [self.songModelListTableView reloadData];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.playerManager getSongIndex] inSection:0];
+    if ([self.songModelListArray count] > 0) [self.songModelListTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
+
+// hide the songList when tap at songList background
+- (void)hideSongListViews:(UITapGestureRecognizer *)sender {
+    NSLog(@"hide songList views");
+    [self.view setAlpha:1];
+    [self.songModelListTableView setHidden:YES];
+    [self.songModelListBackgroundView setHidden:YES];
+}
+
+// setup song model list table view
+- (void)songModelListTableViewSetup {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    UITableView *songListView = [[UITableView alloc] initWithFrame:CGRectMake(0, screenBounds.size.height * 0.5, screenBounds.size.width, screenBounds.size.height * 0.5)];
+    [songListView registerNib:[UINib nibWithNibName:@"songListCellNib" bundle:nil] forCellReuseIdentifier:@"songListCell"];
+    [songListView setBackgroundColor:[UIColor darkGrayColor]];
+    
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height)];
+    [backgroundView setBackgroundColor:[UIColor clearColor]];
+    UITapGestureRecognizer *tapOnBackGroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideSongListViews:)];
+    [backgroundView addGestureRecognizer:tapOnBackGroundView];
+    
+    [songListView setDataSource:self];
+    [songListView setDelegate:self];
+    self.songModelListTableView = songListView;
+    self.songModelListBackgroundView = backgroundView;
+    [[self view] addSubview:self.songModelListBackgroundView];
+    [[self view] addSubview:self.songModelListTableView];
+}
+
+// song list button pressed
+- (IBAction)songListButtonPressed:(UIButton *)sender {
+    NSLog(@"song list button pressed");
+    if (!self.songModelListArray) {
+        NSLog(@"create songList");
+        self.songModelListArray = [self.playerManager getSongModelList];
+    }
+    if (!self.songModelListTableView) {
+        NSLog(@"create songListTableView");
+        [self songModelListTableViewSetup];
+    }
+    if (self.songModelListTableView) {
+        [self.view setAlpha:0.85];
+        [self.songModelListTableView setHidden:NO];
+        [self.songModelListBackgroundView setHidden:NO];
+        [self updateSongModelListTableView];
+    }
 }
 
 #pragma slider
@@ -490,6 +532,7 @@
     }];
 }
 
+// setup locked screen media info
 - (void)setupNowPlaying {
     NSMutableDictionary *playingInfo = [[NSMutableDictionary alloc] init];
     if (self.songNameLabel.text) [playingInfo setObject:self.songNameLabel.text forKey:MPMediaItemPropertyTitle]; // set song name
@@ -501,6 +544,7 @@
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:playingInfo];
 }
 
+// handle interupt
 - (void)interruptHandle:(NSNotification *)notification {
     NSDictionary *interruptInfo = notification.userInfo;
     NSNumber *interruptType = [interruptInfo objectForKey:AVAudioSessionInterruptionTypeKey];
@@ -510,7 +554,8 @@
     }
 }
 
-# pragma songListTableViewDelegate
+# pragma songModelListTableViewDelegate
+// set the player to play the song at index
 - (void)setToSongIndex:(NSInteger)index {
     [self removeTimersAndObservers];
     [self.playerManager setSongIndex:index];
@@ -518,8 +563,45 @@
     [self play:self.playButton];
 }
 
-- (NSInteger)getSongIndex {
-    return [self.playerManager getSongIndex];
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"songListCell" forIndexPath:indexPath];
+    // Configure the cell...
+    [cell setBackgroundColor:[UIColor clearColor]];
+    songModel *song = [self.songModelListArray objectAtIndex:[indexPath row]];
+    [cell.textLabel setTextColor:[UIColor whiteColor]];
+    [cell.detailTextLabel setTextColor:[UIColor whiteColor]];
+    [cell.textLabel setText:song.songName];
+    [cell.detailTextLabel setText:song.singer];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    if ([self.playerManager getSongIndex] == [indexPath row]) {
+        [cell.detailTextLabel setTextColor:[UIColor blackColor]];
+        [cell.textLabel setTextColor:[UIColor blackColor]];
+        [cell setBackgroundColor:[UIColor lightGrayColor]];
+    }
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.songModelListArray ? [self.songModelListArray count] : 0;
+}
+
+- (void)tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
+    NSLog(@"tap on row: %ld", (long)[indexPath row]);
+    // resume state of previous selected cell
+    NSIndexPath *preSelectedCellIndexPath = [NSIndexPath indexPathForItem:[self.playerManager getSongIndex] inSection:0];
+    UITableViewCell *preSelectedCell = [self.songModelListTableView cellForRowAtIndexPath:preSelectedCellIndexPath];
+    [preSelectedCell.textLabel setTextColor:[UIColor whiteColor]];
+    [preSelectedCell.detailTextLabel setTextColor:[UIColor whiteColor]];
+    [preSelectedCell setBackgroundColor:[UIColor clearColor]];
+    
+    // send current selected cell song to playerManager for playing
+    [self setToSongIndex:[indexPath row]];
+    
+    // update new selected cell state
+    UITableViewCell *cell = [self.songModelListTableView cellForRowAtIndexPath:indexPath];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
+    [cell.detailTextLabel setTextColor:[UIColor blackColor]];
+    [cell setBackgroundColor:[UIColor lightGrayColor]];
 }
 
 @end

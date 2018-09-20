@@ -27,7 +27,6 @@
 		CE092BEC213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */; };
 		CE092BEE213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */; };
 		CE092BF0213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */; };
-		CE2F690E21478E0500F265BC /* SongListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2F690D21478E0500F265BC /* SongListTableViewController.m */; };
 		CEBBB15E214AD35200F081C2 /* songListCellNib.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEBBB15D214AD35200F081C2 /* songListCellNib.xib */; };
 /* End PBXBuildFile section */
 
@@ -82,8 +81,6 @@
 		CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "最佳损友-陈奕迅.lrc"; sourceTree = "<group>"; };
 		CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "最佳损友-陈奕迅.mp3"; sourceTree = "<group>"; };
 		CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "最佳损友-陈奕迅.jpg"; sourceTree = "<group>"; };
-		CE2F690C21478E0500F265BC /* SongListTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SongListTableViewController.h; sourceTree = "<group>"; };
-		CE2F690D21478E0500F265BC /* SongListTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SongListTableViewController.m; sourceTree = "<group>"; };
 		CEBBB15D214AD35200F081C2 /* songListCellNib.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = songListCellNib.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,8 +142,6 @@
 				CE092B90212E5E0700E9FF26 /* PlayerViewController.m */,
 				CE092BE8213B9A5800E9FF26 /* lyricScrollView.h */,
 				CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */,
-				CE2F690C21478E0500F265BC /* SongListTableViewController.h */,
-				CE2F690D21478E0500F265BC /* SongListTableViewController.m */,
 				CE092B92212E5E0700E9FF26 /* Main.storyboard */,
 				CE092B98212E5E0800E9FF26 /* Assets.xcassets */,
 				CE092B9A212E5E0800E9FF26 /* LaunchScreen.storyboard */,
@@ -383,7 +378,6 @@
 				CE092B91212E5E0700E9FF26 /* PlayerViewController.m in Sources */,
 				CE092B9F212E5E0800E9FF26 /* main.m in Sources */,
 				CE092BEA213B9A5800E9FF26 /* lyricScrollView.m in Sources */,
-				CE2F690E21478E0500F265BC /* SongListTableViewController.m in Sources */,
 				CE092BD421326F1400E9FF26 /* playerManager.m in Sources */,
 				CE092BDB2138DA9200E9FF26 /* songModel.m in Sources */,
 				CE092B8E212E5E0700E9FF26 /* AppDelegate.m in Sources */,
