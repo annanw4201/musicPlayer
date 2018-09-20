@@ -200,6 +200,7 @@
             [self removeSliderTimer];
             [self removeLrcLabelTimer];
             [self pauseSongImageViewAnimate];
+            [self pauseNowPlayingCenter];
             [sender setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         }
     }
@@ -453,8 +454,9 @@
 - (void)addLrcLabelTimer {
     [self removeLrcLabelTimer];
     if (debug) NSLog(@"PlayerViewController:add lrc timer");
-    self.lrcLabelTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcLabel)];
-    [_lrcLabelTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    CADisplayLink *timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcLabel)];
+    self.lrcLabelTimer = timer;
+    [self.lrcLabelTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
 // remove timer from LRC label
@@ -512,12 +514,7 @@
     [remoteControlCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         if (debug) NSLog(@"PlayerViewController:mp pause");
         [self play:self.playButton];
-        
-        // set the remote control playback rate to be 0.0, otherwise the elasped and total time will kepp counting
-        NSMutableDictionary *playingInfo = [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo mutableCopy];
-        [playingInfo setValue:[NSNumber numberWithDouble:0.0] forKeyPath:MPNowPlayingInfoPropertyPlaybackRate];
-        [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:playingInfo];
-        
+        [self pauseNowPlayingCenter];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [remoteControlCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
@@ -530,6 +527,13 @@
         [self nextSong:self.nextSongButton];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
+}
+
+// set the remote control playback rate to be 0.0, otherwise the elasped and total time will kepp counting
+- (void)pauseNowPlayingCenter {
+    NSMutableDictionary *playingInfo = [[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo mutableCopy];
+    [playingInfo setValue:[NSNumber numberWithDouble:0.0] forKeyPath:MPNowPlayingInfoPropertyPlaybackRate];
+    [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:playingInfo];
 }
 
 // setup locked screen media info
@@ -556,7 +560,7 @@
 
 # pragma songModelListTableViewDelegate
 // set the player to play the song at index
-- (void)setToSongIndex:(NSInteger)index {
+- (void)playSongAtIndex:(NSInteger)index {
     [self removeTimersAndObservers];
     [self.playerManager setSongIndex:index];
     [self prepareToPlay:nil];
@@ -595,7 +599,7 @@
     [preSelectedCell setBackgroundColor:[UIColor clearColor]];
     
     // send current selected cell song to playerManager for playing
-    [self setToSongIndex:[indexPath row]];
+    [self playSongAtIndex:[indexPath row]];
     
     // update new selected cell state
     UITableViewCell *cell = [self.songModelListTableView cellForRowAtIndexPath:indexPath];
