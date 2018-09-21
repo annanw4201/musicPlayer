@@ -12,7 +12,6 @@
 		CE092B94212E5E0700E9FF26 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE092B92212E5E0700E9FF26 /* Main.storyboard */; };
 		CE092B97212E5E0700E9FF26 /* musicPlayer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE092B95212E5E0700E9FF26 /* musicPlayer.xcdatamodeld */; };
 		CE092B99212E5E0800E9FF26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE092B98212E5E0800E9FF26 /* Assets.xcassets */; };
-		CE092B9C212E5E0800E9FF26 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE092B9A212E5E0800E9FF26 /* LaunchScreen.storyboard */; };
 		CE092B9F212E5E0800E9FF26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092B9E212E5E0800E9FF26 /* main.m */; };
 		CE092BA9212E5E0800E9FF26 /* musicPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BA8212E5E0800E9FF26 /* musicPlayerTests.m */; };
 		CE092BB4212E5E0800E9FF26 /* musicPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CE092BB3212E5E0800E9FF26 /* musicPlayerUITests.m */; };
@@ -27,6 +26,7 @@
 		CE092BEC213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */; };
 		CE092BEE213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */; };
 		CE092BF0213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */; };
+		CE774B2C2154CC9500D1EDD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE774B2B2154CC9500D1EDD9 /* LaunchScreen.storyboard */; };
 		CEBBB15E214AD35200F081C2 /* songListCellNib.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEBBB15D214AD35200F081C2 /* songListCellNib.xib */; };
 /* End PBXBuildFile section */
 
@@ -56,7 +56,6 @@
 		CE092B93212E5E0700E9FF26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE092B96212E5E0700E9FF26 /* musicPlayer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = musicPlayer.xcdatamodel; sourceTree = "<group>"; };
 		CE092B98212E5E0800E9FF26 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CE092B9B212E5E0800E9FF26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE092B9D212E5E0800E9FF26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE092B9E212E5E0800E9FF26 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE092BA4212E5E0800E9FF26 /* musicPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = musicPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +80,7 @@
 		CE092BEB213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "最佳损友-陈奕迅.lrc"; sourceTree = "<group>"; };
 		CE092BED213D26BC00E9FF26 /* 最佳损友-陈奕迅.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "最佳损友-陈奕迅.mp3"; sourceTree = "<group>"; };
 		CE092BEF213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "最佳损友-陈奕迅.jpg"; sourceTree = "<group>"; };
+		CE774B2B2154CC9500D1EDD9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CEBBB15D214AD35200F081C2 /* songListCellNib.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = songListCellNib.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,7 +144,7 @@
 				CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */,
 				CE092B92212E5E0700E9FF26 /* Main.storyboard */,
 				CE092B98212E5E0800E9FF26 /* Assets.xcassets */,
-				CE092B9A212E5E0800E9FF26 /* LaunchScreen.storyboard */,
+				CE774B2B2154CC9500D1EDD9 /* LaunchScreen.storyboard */,
 				CEBBB15D214AD35200F081C2 /* songListCellNib.xib */,
 				CE092B9D212E5E0800E9FF26 /* Info.plist */,
 				CE092B9E212E5E0800E9FF26 /* main.m */,
@@ -340,10 +340,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE092B9C212E5E0800E9FF26 /* LaunchScreen.storyboard in Resources */,
 				CE092B99212E5E0800E9FF26 /* Assets.xcassets in Resources */,
 				CE092BEC213D269E00E9FF26 /* 最佳损友-陈奕迅.lrc in Resources */,
 				CE092BF0213D26D900E9FF26 /* 最佳损友-陈奕迅.jpg in Resources */,
+				CE774B2C2154CC9500D1EDD9 /* LaunchScreen.storyboard in Resources */,
 				CE092BCA21311FEB00E9FF26 /* 泡沫-邓紫棋.lrc in Resources */,
 				CE092BC421311F6100E9FF26 /* 泡沫-邓紫棋.jpg in Resources */,
 				CE092BC721311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 in Resources */,
@@ -424,14 +424,6 @@
 				CE092B93212E5E0700E9FF26 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		CE092B9A212E5E0800E9FF26 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CE092B9B212E5E0800E9FF26 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -551,6 +543,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3KU6JNS9FU;
 				INFOPLIST_FILE = musicPlayer/Info.plist;
@@ -568,6 +561,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3KU6JNS9FU;
 				INFOPLIST_FILE = musicPlayer/Info.plist;

@@ -43,7 +43,7 @@ static playerManager *_musicManager = nil;
 
 - (void)getLocalSongs {
     NSMutableArray *modelList = [[NSMutableArray alloc] init];
-    MPMediaQuery *mediaQuery = [[MPMediaQuery alloc] init];
+    MPMediaQuery *mediaQuery = [MPMediaQuery artistsQuery];
     NSArray *itemsInMedia = [mediaQuery items];
     for (MPMediaItem *item in itemsInMedia) {
         NSString *songName = [item valueForProperty:MPMediaItemPropertyTitle];
