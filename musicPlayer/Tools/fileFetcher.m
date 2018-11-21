@@ -14,10 +14,14 @@
 #define APIKEY @"&api_key=25842f51f0c6dca8d94d25d68473179e"
 #define APIFormat @"&format=json"
 
-
 #define NewMusicRankingList @"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8¬ice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=27&_=1519963122923"
 #define songDataURLString(songmid) [NSString stringWithFormat:@"http://ws.stream.qqmusic.qq.com/C100%@.m4a?fromtag=0&guid=126548448", songmid]
 #define lyricAPI(songid) [NSString stringWithFormat:@"http://music.qq.com/miniportal/static/lyric/%@/%@.xml",  [NSNumber numberWithInt:songid % 100], [NSNumber numberWithInt:songid]]]
+
+
+// lrc api from Baidu music
+#define LRCAPI(name) [NSString stringWithFormat:@"http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.search.lrcys&format=json&query=%@", name]
+
 
 @implementation fileFetcher
 
@@ -58,5 +62,22 @@
     return [NSURL URLWithString:songDataURLString(songmid)];
 }
 
++ (NSURL *)urlOfLrc:(NSString *)lrcname {
+    NSString *query = LRCAPI(lrcname);
+    query = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSData *jsonData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:query] encoding:NSUTF8StringEncoding error:nil] dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
+    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+
+    id lrcList = [results objectForKey:@"lrcys_list"];
+    //NSLog(@"results: %@", results);
+    NSDictionary *firstLrcDict = nil;
+    if ([lrcList isKindOfClass:[NSArray class]]) {
+        firstLrcDict = [lrcList firstObject];
+    }
+    
+    return firstLrcDict != nil ? [NSURL URLWithString:[firstLrcDict objectForKey:@"lrclink"]] : nil;
+}
 
 @end

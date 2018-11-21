@@ -66,12 +66,14 @@
 }
 
 // build time array with corresponding lyric array using passing file
-- (void)setupWithFile:(NSString *)fileName {
+- (void)setupWithFile:(NSString *)file {
     NSMutableArray *mutableTimeArr = [[NSMutableArray alloc] init];
     NSMutableArray *mutableLyricArr = [[NSMutableArray alloc] init];
     
-    NSString *lrcPath = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
-    NSString *lrcStr = [NSString stringWithContentsOfFile:lrcPath encoding:NSUTF8StringEncoding error:nil];
+    //NSString *lrcPath = [[NSBundle mainBundle] pathForResource:file ofType:nil];
+    //NSString *lrcStr = [NSString stringWithContentsOfFile:lrcPath encoding:NSUTF8StringEncoding error:nil];
+    NSString *lrcStr = file;
+    
     if (!lrcStr) return;
     NSArray *lrcArr = [lrcStr componentsSeparatedByString:@"\n"];
     if (debug) NSLog(@"%@", lrcStr);

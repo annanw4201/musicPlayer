@@ -56,7 +56,7 @@
 // songListTableView
 @property (weak, nonatomic) UIView *songModelListBackgroundView;
 @property (weak, nonatomic) UITableView *songModelListTableView;
-@property (weak, nonatomic)NSArray *songModelListArray;
+@property (weak, nonatomic) NSArray *songModelListArray;
 @end
 
 @implementation PlayerViewController
@@ -486,9 +486,12 @@
 // scroll view did scroll
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGPoint offcetPoint = [scrollView contentOffset];
-    CGFloat alpha = 1 - offcetPoint.x / [[self view] frame].size.width;
-    [_songImageView setAlpha:alpha];
-    [_LRCLabel setAlpha:alpha];
+    // ensure if the user actually slide horizontally
+    if (offcetPoint.x != 0) {
+        CGFloat alpha = 1 - offcetPoint.x / [[self view] frame].size.width;
+        [_songImageView setAlpha:alpha];
+        [_LRCLabel setAlpha:alpha];
+    }
 }
 
 #pragma remoteControl

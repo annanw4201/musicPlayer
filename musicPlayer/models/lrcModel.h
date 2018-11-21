@@ -11,7 +11,7 @@
 @interface lrcModel : NSObject
 
 - (void)setupWithFile: (NSString *)fileName;
-- (id)initWithFile:(NSString *)fileName;
+- (id)initWithFile: (NSString *)file;
 - (id)init;
 - (NSString *)lyricForTimeInSec: (float)time;
 - (NSArray *)getLyricArr;

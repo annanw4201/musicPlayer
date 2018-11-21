@@ -12,4 +12,5 @@
 + (NSArray *)querySongList;
 + (NSString *)querySongmid:(NSDictionary *)songData;
 + (NSURL *)urlOfSongmid:(NSString *)songmid;
++ (NSURL *)urlOfLrc:(NSString *)lrcname;
 @end

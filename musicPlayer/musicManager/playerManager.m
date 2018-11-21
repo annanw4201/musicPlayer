@@ -13,6 +13,7 @@
 #import "fileFetcher.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "lrcModel.h"
+#import "fileFetcher.h"
 
 @interface playerManager ()
 @property (nonatomic,strong) AVPlayer *player;
@@ -61,6 +62,13 @@ static playerManager *_musicManager = nil;
         song.songURL = songURL;
         song.songMPArtWork = songArtWork;
         song.lrcModel = [[lrcModel alloc] initWithFile:lyric];
+        
+        dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
+        dispatch_async(downloadQueue, ^{
+            NSURL *lrcURL = [fileFetcher urlOfLrc:songName];
+            NSString *lrcFile = [NSString stringWithContentsOfURL:lrcURL encoding:NSUTF8StringEncoding error:nil];
+            song.lrcModel = [[lrcModel alloc] initWithFile:lrcFile];
+        });
         [modelList addObject:song];
     }
     if ([modelList count] > 0) self.songModelList = modelList;
