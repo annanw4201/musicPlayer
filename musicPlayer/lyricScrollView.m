@@ -7,6 +7,8 @@
 //
 
 #import "lyricScrollView.h"
+
+// for register cell class for scroll view
 #define cellIdentifier @"lyricCell"
 
 @interface lyricScrollView () <UITableViewDataSource>
@@ -74,13 +76,11 @@
 // scroll the table view to the specified row (must reload tableView first, or won't work)
 - (void)scrollToRow:(NSInteger)row {
     if (row != _currentLyricIndex) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.lrcTableView reloadData];
-            NSIndexPath *currentTimeRow = [NSIndexPath indexPathForRow:row inSection:0];
-            [self.lrcTableView scrollToRowAtIndexPath:currentTimeRow atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-            self.currentLyricIndex = row;
-            NSLog(@"lyricScrollView:scroll to row: %ld", (long)row);
-        });
+        [self.lrcTableView reloadData];
+        NSIndexPath *currentTimeRow = [NSIndexPath indexPathForRow:row inSection:0];
+        [self.lrcTableView scrollToRowAtIndexPath:currentTimeRow atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        self.currentLyricIndex = row;
+        NSLog(@"lyricScrollView:scroll to row: %ld", (long)row);
     }
 }
 

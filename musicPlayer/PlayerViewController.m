@@ -8,9 +8,9 @@
 
 #import "PlayerViewController.h"
 #import <AVFoundation/AVFoundation.h>
-#import "playerManager.h"
-#import "songModel.h"
-#import "lrcModel.h"
+#import "musicManager/playerManager.h"
+#import "models/songModel.h"
+#import "models/lrcModel.h"
 #import "lyricScrollView.h"
 #import <MediaPlayer/MediaPlayer.h>
 
@@ -84,12 +84,7 @@
     [self.playerManager loadMusic:nil];
     self.songModelListArray = [self.playerManager getSongModelList];
     
-    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
-    dispatch_async(downloadQueue, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self prepareToPlay:nil];
-        });
-    });
+    [self prepareToPlay:nil];
     
     // when the app back to foreground add roatable image animation
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSongImageViewAnimate) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
@@ -208,32 +203,22 @@
 
 // play next song
 - (IBAction)nextSong:(UIButton *)sender {
-    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
-    dispatch_async(downloadQueue, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self removeTimersAndObservers];
-            [self.playerManager nextSong];
-            //[self prepareToPlay:@"最佳损友-陈奕迅"];
-            [self prepareToPlay:nil];
-            [self play:self.playButton];
-            [self updateSongModelListTableView];
-        });
-    });
+    [self removeTimersAndObservers];
+    [self.playerManager nextSong];
+    //[self prepareToPlay:@"最佳损友-陈奕迅"];
+    [self prepareToPlay:nil];
+    [self play:self.playButton];
+    [self updateSongModelListTableView];
 }
 
 // play last song
 - (IBAction)lastSong:(UIButton *)sender {
-    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
-    dispatch_async(downloadQueue, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self removeTimersAndObservers];
-            [self.playerManager lastSong];
-            //[self prepareToPlay:@"泡沫-邓紫棋"];
-            [self prepareToPlay:nil];
-            [self play:self.playButton];
-            [self updateSongModelListTableView];
-        });
-    });
+    [self removeTimersAndObservers];
+    [self.playerManager lastSong];
+    //[self prepareToPlay:@"泡沫-邓紫棋"];
+    [self prepareToPlay:nil];
+    [self play:self.playButton];
+    [self updateSongModelListTableView];
 }
 
 // random play
