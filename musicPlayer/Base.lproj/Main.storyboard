@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait">
+    <device id="retina6_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -33,24 +33,38 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="259"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="author" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DSb-1q-0kG">
-                                        <rect key="frame" x="182" y="144.5" width="50" height="20"/>
+                                        <rect key="frame" x="182" y="144.66666666666666" width="50" height="20"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="music name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edj-PO-qM0">
-                                        <rect key="frame" x="160.5" y="119.5" width="93" height="20"/>
+                                        <rect key="frame" x="160.66666666666666" y="119.66666666666669" width="93" height="20"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uS3-Z3-53O" userLabel="lyricButton">
+                                        <rect key="frame" x="369" y="224" width="35" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="3mb-Gb-xR8"/>
+                                            <constraint firstAttribute="width" secondItem="uS3-Z3-53O" secondAttribute="height" multiplier="1:1" id="8Bo-0A-waC"/>
+                                            <constraint firstAttribute="width" constant="35" id="cJG-Z1-Z6p"/>
+                                        </constraints>
+                                        <state key="normal" image="lyric"/>
+                                        <connections>
+                                            <action selector="lyricButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="a8A-we-Jbm"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="DSb-1q-0kG" firstAttribute="centerX" secondItem="zX9-Em-8cG" secondAttribute="centerX" id="6Jq-JM-2PS"/>
                                     <constraint firstItem="edj-PO-qM0" firstAttribute="centerX" secondItem="zX9-Em-8cG" secondAttribute="centerX" id="CvT-wL-01O"/>
+                                    <constraint firstAttribute="bottom" secondItem="uS3-Z3-53O" secondAttribute="bottom" id="MpJ-sy-jGf"/>
                                     <constraint firstItem="DSb-1q-0kG" firstAttribute="top" secondItem="edj-PO-qM0" secondAttribute="bottom" constant="5" id="bk0-mF-8gX"/>
                                     <constraint firstItem="edj-PO-qM0" firstAttribute="centerY" secondItem="zX9-Em-8cG" secondAttribute="centerY" id="l1q-Qu-TaF"/>
+                                    <constraint firstAttribute="trailing" secondItem="uS3-Z3-53O" secondAttribute="trailing" constant="10" id="zvu-o6-EW3"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y7a-qE-qPP" userLabel="ImageView">
@@ -225,14 +239,31 @@
                         <outlet property="songNameLabel" destination="edj-PO-qM0" id="BmG-fq-0b8"/>
                         <outlet property="songSlider" destination="5oT-D5-ct0" id="DMp-Um-Ygl"/>
                         <outlet property="totalTimeLabel" destination="Amx-Pc-bJ9" id="NUz-Rj-Gq4"/>
+                        <segue destination="n8b-ob-anG" kind="presentation" identifier="searchedLyricsSegue" id="wpY-5p-UTt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="24.800000000000001" y="30.134932533733135"/>
+            <point key="canvasLocation" x="24.637681159420293" y="30.133928571428569"/>
+        </scene>
+        <!--Searched Lyrics View Controller-->
+        <scene sceneID="hwy-65-2h6">
+            <objects>
+                <viewController id="n8b-ob-anG" customClass="searchedLyricsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="059-fw-oed">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="5Rx-4R-mah"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9ih-n7-MlB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="817" y="30"/>
         </scene>
     </scenes>
     <resources>
+        <image name="lyric" width="30" height="30"/>
         <image name="next" width="64" height="64"/>
         <image name="order" width="60" height="50"/>
         <image name="play" width="64" height="64"/>

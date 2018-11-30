@@ -26,6 +26,7 @@
 		CE774B2C2154CC9500D1EDD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE774B2B2154CC9500D1EDD9 /* LaunchScreen.storyboard */; };
 		CEBBB15E214AD35200F081C2 /* songListCellNib.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEBBB15D214AD35200F081C2 /* songListCellNib.xib */; };
 		CEBC6FD821A7D5EF00B54760 /* cache.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBC6FD721A7D5EF00B54760 /* cache.m */; };
+		CEBC6FE721ACE82500B54760 /* searchedLyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,8 @@
 		CEBBB15D214AD35200F081C2 /* songListCellNib.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = songListCellNib.xib; sourceTree = "<group>"; };
 		CEBC6FD621A7D5EF00B54760 /* cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cache.h; sourceTree = "<group>"; };
 		CEBC6FD721A7D5EF00B54760 /* cache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cache.m; sourceTree = "<group>"; };
+		CEBC6FE521ACE82500B54760 /* searchedLyricsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = searchedLyricsViewController.h; sourceTree = "<group>"; };
+		CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = searchedLyricsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +142,8 @@
 				CE092B90212E5E0700E9FF26 /* PlayerViewController.m */,
 				CE092BE8213B9A5800E9FF26 /* lyricScrollView.h */,
 				CE092BE9213B9A5800E9FF26 /* lyricScrollView.m */,
+				CEBC6FE521ACE82500B54760 /* searchedLyricsViewController.h */,
+				CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */,
 				CE092B92212E5E0700E9FF26 /* Main.storyboard */,
 				CE092B98212E5E0800E9FF26 /* Assets.xcassets */,
 				CE774B2B2154CC9500D1EDD9 /* LaunchScreen.storyboard */,
@@ -369,6 +374,7 @@
 			files = (
 				CE092B97212E5E0700E9FF26 /* musicPlayer.xcdatamodeld in Sources */,
 				CE092B91212E5E0700E9FF26 /* PlayerViewController.m in Sources */,
+				CEBC6FE721ACE82500B54760 /* searchedLyricsViewController.m in Sources */,
 				CE092B9F212E5E0800E9FF26 /* main.m in Sources */,
 				CE092BEA213B9A5800E9FF26 /* lyricScrollView.m in Sources */,
 				CEBC6FD821A7D5EF00B54760 /* cache.m in Sources */,
@@ -541,6 +547,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3KU6JNS9FU;
 				INFOPLIST_FILE = musicPlayer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -559,6 +566,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3KU6JNS9FU;
 				INFOPLIST_FILE = musicPlayer/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -13,10 +13,12 @@
 #import "models/lrcModel.h"
 #import "lyricScrollView.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "Tools/fileFetcher.h"
+#import "searchedLyricsViewController.h"
 
 #define debug true
 
-@interface PlayerViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface PlayerViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, searchedLyricsDelegate>
 // back ground image
 @property (weak, nonatomic) IBOutlet UIImageView *backGroundImageView;
 
@@ -139,6 +141,30 @@
     else if ([[self.playerManager currentPlayer] rate] == 1) {
         [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     }
+}
+
+- (IBAction)lyricButtonPressed:(UIButton *)sender {
+    NSLog(@"lyricButtonPressed seguing to searchedLyricsVC");
+    songModel *currentSong = [self.playerManager getCurrentSongModel];
+    
+    [sender setImage:nil forState:UIControlStateNormal];
+    UIActivityIndicatorView *spinnerView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [spinnerView setHidesWhenStopped:YES];
+    [spinnerView startAnimating];
+    [spinnerView.centerXAnchor constraintEqualToAnchor:[sender centerXAnchor] constant:0];
+    [spinnerView.centerYAnchor constraintEqualToAnchor:[sender centerYAnchor] constant:0];
+    [sender addSubview:spinnerView];
+    
+    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
+    dispatch_async(downloadQueue, ^{
+        NSArray *songList = [fileFetcher listOfSongs:currentSong.songName withSinger:currentSong.singer];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSegueWithIdentifier:@"searchedLyricsSegue" sender:songList];
+            [sender willRemoveSubview:spinnerView];
+            [sender setImage:[UIImage imageNamed:@"lyric"] forState:UIControlStateNormal];
+            [spinnerView stopAnimating];
+        });
+    });
 }
 
 #pragma songManager
@@ -282,6 +308,7 @@
     UITableView *songListView = [[UITableView alloc] initWithFrame:CGRectMake(0, screenBounds.size.height * 0.5, screenBounds.size.width, screenBounds.size.height * 0.5)];
     [songListView registerNib:[UINib nibWithNibName:@"songListCellNib" bundle:nil] forCellReuseIdentifier:@"songListCell"];
     [songListView setBackgroundColor:[UIColor darkGrayColor]];
+    [songListView.layer setCornerRadius:10.0];
     
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height)];
     [backgroundView setBackgroundColor:[UIColor clearColor]];
@@ -594,6 +621,31 @@
     [cell.textLabel setTextColor:[UIColor blackColor]];
     [cell.detailTextLabel setTextColor:[UIColor blackColor]];
     [cell setBackgroundColor:[UIColor lightGrayColor]];
+}
+
+#pragma Navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([sender isKindOfClass:[NSArray class]]) {
+        NSArray *songList = (NSArray *)sender;
+        searchedLyricsViewController *destinationVC = (searchedLyricsViewController *)segue.destinationViewController;
+        [destinationVC setDelegate:self];
+        [destinationVC setSongList:songList];
+    }
+}
+
+#pragma searchedLyricsDelegate
+- (void)updateCurrentSongLrcModel:(NSString *)lrclink {
+    dispatch_queue_t downloadQueue = dispatch_queue_create("download", NULL);
+    dispatch_async(downloadQueue, ^{
+        NSURL *lrcURL = [fileFetcher urlOfLrclink:lrclink];
+        NSString *lrcFile = [NSString stringWithContentsOfURL:lrcURL encoding:NSUTF8StringEncoding error:nil];
+        songModel *currentSongModel = [self.playerManager getCurrentSongModel];
+        currentSongModel.lrcModel = [[lrcModel alloc] initWithFile:lrcFile];
+        self.currentLrcModel = currentSongModel.lrcModel;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.lyricScrollView setLrcArr:[self.currentLrcModel getLyricArr]];
+        });
+    });
 }
 
 @end

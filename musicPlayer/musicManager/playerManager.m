@@ -172,4 +172,8 @@ static playerManager *_musicManager = nil;
     return self.songIndex;
 }
 
+- (songModel *)getCurrentSongModel {
+    return self.currentSongModel;
+}
+
 @end

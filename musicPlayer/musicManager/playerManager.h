@@ -26,5 +26,6 @@
 - (NSArray *)getSongModelList;
 - (void)setSongIndex:(NSUInteger)songIndex;
 - (NSInteger)getSongIndex;
+- (songModel *)getCurrentSongModel;
 @end
 

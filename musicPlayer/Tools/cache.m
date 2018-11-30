@@ -29,6 +29,7 @@
         NSLog(@"lrc not exists, %@", songName);
         NSURL *lrcURL = [fileFetcher urlOfLrc:songName withSinger:singerName];
         NSData *data = [NSData dataWithContentsOfURL:lrcURL];
+        //NSData *data = [fileFetcher lrcData:songName withSinger:singerName];
         [data writeToFile:pathToSave atomically:YES];
     }
 }
