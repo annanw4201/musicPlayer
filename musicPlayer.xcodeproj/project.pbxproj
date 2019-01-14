@@ -27,6 +27,7 @@
 		CEBC6FD821A7D5EF00B54760 /* cache.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBC6FD721A7D5EF00B54760 /* cache.m */; };
 		CEBC6FE721ACE82500B54760 /* searchedLyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */; };
 		CEF4D7A921EBB9D4003693CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF4D7A821EBB9D4003693CB /* Main.storyboard */; };
+		CEF4D7AF21EC2C8A003693CB /* songSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF4D7AE21EC2C8A003693CB /* songSearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,8 @@
 		CEBC6FE521ACE82500B54760 /* searchedLyricsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = searchedLyricsViewController.h; sourceTree = "<group>"; };
 		CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = searchedLyricsViewController.m; sourceTree = "<group>"; };
 		CEF4D7A821EBB9D4003693CB /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		CEF4D7AD21EC2C8A003693CB /* songSearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = songSearchViewController.h; sourceTree = "<group>"; };
+		CEF4D7AE21EC2C8A003693CB /* songSearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = songSearchViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +242,8 @@
 				CE092B90212E5E0700E9FF26 /* PlayerViewController.m */,
 				CEBC6FE521ACE82500B54760 /* searchedLyricsViewController.h */,
 				CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */,
+				CEF4D7AD21EC2C8A003693CB /* songSearchViewController.h */,
+				CEF4D7AE21EC2C8A003693CB /* songSearchViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -405,6 +410,7 @@
 				CE092BD421326F1400E9FF26 /* playerManager.m in Sources */,
 				CE092BDB2138DA9200E9FF26 /* songModel.m in Sources */,
 				CE092B8E212E5E0700E9FF26 /* AppDelegate.m in Sources */,
+				CEF4D7AF21EC2C8A003693CB /* songSearchViewController.m in Sources */,
 				CE092BE02138E94800E9FF26 /* fileFetcher.m in Sources */,
 				CE092BE32139B78300E9FF26 /* lrcModel.m in Sources */,
 			);

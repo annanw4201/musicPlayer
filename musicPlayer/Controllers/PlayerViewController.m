@@ -104,6 +104,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     if (debug) NSLog(@"PlayerViewController:view will appear");
     [super viewWillAppear:animated];
+    [self addSongImageViewAnimate];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -141,6 +142,7 @@
     else if ([[self.playerManager currentPlayer] rate] == 1) {
         [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     }
+    [self addSongImageViewAnimate];
 }
 
 - (IBAction)lyricButtonPressed:(UIButton *)sender {
