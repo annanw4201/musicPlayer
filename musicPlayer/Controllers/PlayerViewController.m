@@ -8,12 +8,12 @@
 
 #import "PlayerViewController.h"
 #import <AVFoundation/AVFoundation.h>
-#import "musicManager/playerManager.h"
-#import "models/songModel.h"
-#import "models/lrcModel.h"
+#import "../musicManager/playerManager.h"
+#import "../Models/songModel.h"
+#import "../Models/lrcModel.h"
 #import "lyricScrollView.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "Tools/fileFetcher.h"
+#import "../Tools/fileFetcher.h"
 #import "searchedLyricsViewController.h"
 
 #define debug true
@@ -173,7 +173,7 @@
     NSInteger min = time / 60;
     NSInteger sec = round((int)time % 60);
     //if (debug) NSLog(PlayerViewController:@"%02ld:%02ld", min, sec);
-    return [NSString stringWithFormat:@"%02ld:%02ld", min, sec];
+    return [NSString stringWithFormat:@"%02ld:%02ld", (long)min, (long)sec];
 }
 
 // set up current playing song
