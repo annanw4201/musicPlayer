@@ -10,8 +10,8 @@
 #import <AVKit/AVKit.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "playerManager.h"
-#import "../models/songModel.h"
-#import "../models/lrcModel.h"
+#import "../Models/songModel.h"
+#import "../Models/lrcModel.h"
 #import "../Tools/cache.h"
 
 @interface playerManager ()
