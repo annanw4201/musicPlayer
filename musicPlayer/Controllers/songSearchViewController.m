@@ -58,12 +58,12 @@
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *text = searchController.searchBar.text;
+    NSLog(@"%@: filter for search text: %@", self.class, text);
     if (!text) return;
     else {
         // filter the songs
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
             songModel *song = (songModel *)evaluatedObject;
-            NSLog(@"%@: song: %@ contains: %@", self.class, song, text);
             return [song.songName containsString:text] || [song.singer containsString:text];
         }];
         NSArray *filteredSongs = [self.data filteredArrayUsingPredicate:predicate];

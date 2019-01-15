@@ -26,7 +26,7 @@
     NSString *pathToSave = [lrcDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.lrc", songName]];
     Boolean lrcExists = [fileManager isReadableFileAtPath:pathToSave];
     if (!lrcExists) {
-        NSLog(@"lrc not exists, %@", songName);
+        //NSLog(@"lrc not exists, %@", songName);
         NSURL *lrcURL = [fileFetcher urlOfLrc:songName withSinger:singerName];
         NSData *data = [NSData dataWithContentsOfURL:lrcURL];
         //NSData *data = [fileFetcher lrcData:songName withSinger:singerName];

@@ -499,7 +499,8 @@
 // lyric scroll view setup
 - (void)setupLyricScrollView {
     _lyricScrollView.delegate = self;
-    [_lyricScrollView setContentSize:CGSizeMake([[self view] frame].size.width * 2, 0)];
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    [_lyricScrollView setContentSize:CGSizeMake(screenBounds.size.width * 2, 0)];
     [_lyricScrollView setLrcArr:[_currentLrcModel getLyricArr]];
 }
 
@@ -508,7 +509,8 @@
     CGPoint offcetPoint = [scrollView contentOffset];
     // ensure if the user actually slide horizontally
     if (offcetPoint.x != 0) {
-        CGFloat alpha = 1 - offcetPoint.x / [[self view] frame].size.width;
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        CGFloat alpha = 1 - offcetPoint.x / screenBounds.size.width;
         [_songImageView setAlpha:alpha];
         [_LRCLabel setAlpha:alpha];
     }

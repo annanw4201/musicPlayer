@@ -42,7 +42,8 @@
     [self setShowsHorizontalScrollIndicator:NO];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    CGRect lrcTableViewFrame = CGRectMake(screenBounds.size.width, 0, screenBounds.size.width, self.frame.size.height);
+    // get lyric scroll view's frame position, and set the lyric table view at the correct position
+    CGRect lrcTableViewFrame = CGRectMake(screenBounds.size.width, -self.frame.origin.y, screenBounds.size.width, self.bounds.size.height);
     UITableView *lyricTableView = [[UITableView alloc] initWithFrame:lrcTableViewFrame];
     
     [lyricTableView setDataSource:self];
@@ -52,7 +53,8 @@
     NSLog(@"lyricScrollView:%@", _lrcTableView);
 }
 
-// set and configure table view (when put following codes inside setup, no updates to tableView)
+// set and configure table view (when put setting codes inside setup,
+//  no updates to tableView since the views are not layouted)
 - (void)layoutSubviews {
     [super layoutSubviews];
     [_lrcTableView setBackgroundColor:[UIColor clearColor]];
