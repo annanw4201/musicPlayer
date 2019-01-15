@@ -18,7 +18,7 @@
 - (AVPlayerItem *) currentPlayerItem;
 - (AVPlayer *) currentPlayer;
 - (void) didfinishPlaying;
-- (songModel *) loadMusic:(NSString *)fileName;
+- (songModel *) loadMusic:(songModel *)song;
 - (void)getLocalSongs;
 - (void)nextSong;
 - (void)lastSong;

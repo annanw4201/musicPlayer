@@ -265,7 +265,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </tabBar>
                     <connections>
-                        <segue destination="0lL-yN-jbc" kind="relationship" relationship="viewControllers" id="Con-dX-QHp"/>
+                        <segue destination="ED4-pk-8PO" kind="relationship" relationship="viewControllers" id="Con-dX-QHp"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="0Vm-GR-8vH"/>
                     </connections>
                 </tabBarController>
@@ -273,51 +273,13 @@
             </objects>
             <point key="canvasLocation" x="24.637681159420293" y="30.133928571428569"/>
         </scene>
-        <!--Song Search View Controller-->
-        <scene sceneID="QzX-7l-PUh">
+        <!--SongSearch-->
+        <scene sceneID="l2G-tl-Gx2">
             <objects>
-                <viewController id="7KO-5L-Icr" customClass="songSearchViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="hhm-u7-6Vo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="OtX-nz-A0j"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="WlV-uE-g1P"/>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="CS6-gu-rJT" id="nTn-gC-1pQ"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ecl-6g-b1Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="CS6-gu-rJT">
-                    <connections>
-                        <outlet property="delegate" destination="7KO-5L-Icr" id="OPr-Kk-Kp3"/>
-                        <outlet property="searchContentsController" destination="7KO-5L-Icr" id="yOa-rU-IaW"/>
-                        <outlet property="searchResultsDataSource" destination="7KO-5L-Icr" id="n0r-jy-EQI"/>
-                        <outlet property="searchResultsDelegate" destination="7KO-5L-Icr" id="ylt-3u-M9h"/>
-                    </connections>
-                </searchDisplayController>
-            </objects>
-            <point key="canvasLocation" x="1605.7971014492755" y="758.70535714285711"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="IcP-2P-yWD">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0lL-yN-jbc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="search" id="Hlz-af-3sa">
-                        <color key="badgeColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </tabBarItem>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9Xf-Km-sDU">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="7KO-5L-Icr" kind="relationship" relationship="rootViewController" id="quj-TK-LRd"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2cp-nV-kIC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="SongSearch" id="ED4-pk-8PO" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="S3s-OI-BPm"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="99A-bv-Ks5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="695.6521739130435" y="758.70535714285711"/>
         </scene>

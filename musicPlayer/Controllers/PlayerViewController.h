@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class songModel;
 
 @interface PlayerViewController : UIViewController
-
-
+- (NSArray *)getSongs;
+- (void)prepareToPlay:(songModel *)song;
+- (IBAction)play:(UIButton *)sender;
 @end
 

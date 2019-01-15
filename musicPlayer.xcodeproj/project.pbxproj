@@ -28,6 +28,9 @@
 		CEBC6FE721ACE82500B54760 /* searchedLyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */; };
 		CEF4D7A921EBB9D4003693CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF4D7A821EBB9D4003693CB /* Main.storyboard */; };
 		CEF4D7AF21EC2C8A003693CB /* songSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF4D7AE21EC2C8A003693CB /* songSearchViewController.m */; };
+		CEF4D7B121ED797F003693CB /* SongSearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF4D7B021ED797F003693CB /* SongSearch.storyboard */; };
+		CEF4D7B421ED7AD1003693CB /* songSearchResultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF4D7B321ED7AD1003693CB /* songSearchResultsTableViewController.m */; };
+		CEF4D7B621ED7AE8003693CB /* SongSearchResults.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF4D7B521ED7AE8003693CB /* SongSearchResults.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +88,10 @@
 		CEF4D7A821EBB9D4003693CB /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		CEF4D7AD21EC2C8A003693CB /* songSearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = songSearchViewController.h; sourceTree = "<group>"; };
 		CEF4D7AE21EC2C8A003693CB /* songSearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = songSearchViewController.m; sourceTree = "<group>"; };
+		CEF4D7B021ED797F003693CB /* SongSearch.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SongSearch.storyboard; sourceTree = "<group>"; };
+		CEF4D7B221ED7AD1003693CB /* songSearchResultsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = songSearchResultsTableViewController.h; sourceTree = "<group>"; };
+		CEF4D7B321ED7AD1003693CB /* songSearchResultsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = songSearchResultsTableViewController.m; sourceTree = "<group>"; };
+		CEF4D7B521ED7AE8003693CB /* SongSearchResults.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SongSearchResults.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +251,8 @@
 				CEBC6FE621ACE82500B54760 /* searchedLyricsViewController.m */,
 				CEF4D7AD21EC2C8A003693CB /* songSearchViewController.h */,
 				CEF4D7AE21EC2C8A003693CB /* songSearchViewController.m */,
+				CEF4D7B221ED7AD1003693CB /* songSearchResultsTableViewController.h */,
+				CEF4D7B321ED7AD1003693CB /* songSearchResultsTableViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -260,9 +269,11 @@
 		CEF4D7A721EBB69E003693CB /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				CEF4D7A821EBB9D4003693CB /* Main.storyboard */,
 				CE774B2B2154CC9500D1EDD9 /* LaunchScreen.storyboard */,
+				CEF4D7A821EBB9D4003693CB /* Main.storyboard */,
 				CEBBB15D214AD35200F081C2 /* songListCellNib.xib */,
+				CEF4D7B021ED797F003693CB /* SongSearch.storyboard */,
+				CEF4D7B521ED7AE8003693CB /* SongSearchResults.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -371,12 +382,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE092B99212E5E0800E9FF26 /* Assets.xcassets in Resources */,
+				CEF4D7B121ED797F003693CB /* SongSearch.storyboard in Resources */,
 				CE774B2C2154CC9500D1EDD9 /* LaunchScreen.storyboard in Resources */,
 				CE092BCA21311FEB00E9FF26 /* 泡沫-邓紫棋.lrc in Resources */,
 				CEF4D7A921EBB9D4003693CB /* Main.storyboard in Resources */,
 				CE092BC421311F6100E9FF26 /* 泡沫-邓紫棋.jpg in Resources */,
 				CE092BC721311FBA00E9FF26 /* 泡沫-邓紫棋.mp3 in Resources */,
 				CEBBB15E214AD35200F081C2 /* songListCellNib.xib in Resources */,
+				CEF4D7B621ED7AE8003693CB /* SongSearchResults.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +426,7 @@
 				CEF4D7AF21EC2C8A003693CB /* songSearchViewController.m in Sources */,
 				CE092BE02138E94800E9FF26 /* fileFetcher.m in Sources */,
 				CE092BE32139B78300E9FF26 /* lrcModel.m in Sources */,
+				CEF4D7B421ED7AD1003693CB /* songSearchResultsTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

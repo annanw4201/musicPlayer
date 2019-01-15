@@ -75,17 +75,15 @@ static playerManager *_musicManager = nil;
 }
 
 // load the song
-- (songModel *) loadMusic:(NSString *)fileName {
-    if ([self.songModelList count] > 0) {
-        songModel *song = [self.songModelList objectAtIndex:self.songIndex];
-        if (song) {
-            NSURL *url = song.songURL;
-            if (url) {
-                self.playerItem = [[AVPlayerItem alloc] initWithURL:url];
-                self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
-                self.currentSongModel = song;
-            }
-        }
+- (songModel *) loadMusic:(songModel *)song {
+    if (!song && [self.songModelList count] > 0) {
+            song = [self.songModelList objectAtIndex:self.songIndex];
+    }
+    NSURL *url = song.songURL;
+    if (url) {
+        self.playerItem = [[AVPlayerItem alloc] initWithURL:url];
+        self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
+        self.currentSongModel = song;
     }
     return self.currentSongModel;
 }

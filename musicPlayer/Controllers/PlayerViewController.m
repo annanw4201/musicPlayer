@@ -134,6 +134,10 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (NSArray *)getSongs {
+    return self.songModelListArray;
+}
+
 // refresh UI
 - (void)refreshUI {
     if ([[self.playerManager currentPlayer] rate] == 0) {
@@ -169,6 +173,7 @@
     });
 }
 
+
 #pragma songManager
 // get time in string format as "01:01"
 - (NSString *)stringForTime:(Float64)time {
@@ -179,9 +184,10 @@
 }
 
 // set up current playing song
-- (void)prepareToPlay:(NSString *)fileName{
-    songModel *song = [self.playerManager loadMusic:fileName];
-    if (!song) song = [[songModel alloc] init];
+- (void)prepareToPlay:(songModel *)song {
+    if (!song) song = [self.playerManager loadMusic:nil];
+    else [self.playerManager loadMusic:song];
+    
     // set title and singer
     [self.singerLabel setText:song.singer];
     [self.songNameLabel setText:song.songName];

@@ -7,10 +7,12 @@
 //
 
 #import "songSearchViewController.h"
+#import "../Controllers/songSearchResultsTableViewController.h"
+#import "../Controllers/PlayerViewController.h"
+#import "../Models/songModel.h"
 
-@interface songSearchViewController ()<UISearchResultsUpdating>
+@interface songSearchViewController ()<UISearchResultsUpdating, songSearchResultsTableViewControllerDelegate>
 @property (nonatomic, strong) NSArray *data;
-@property (nonatomic, strong) NSArray *filteredData;
 @end
 
 @implementation songSearchViewController
@@ -18,12 +20,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    
+    // configure search controller
+    [self configureSearchController];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    PlayerViewController *playerVC = (PlayerViewController *)[self.tabBarController.viewControllers lastObject];
+    self.data = [playerVC getSongs];
+}
+
+- (void)setData:(NSArray *)data {
+    if (_data != data) {
+        _data = data;
+    }
+}
+
+- (void)configureSearchController {
+    UINavigationController *searchResultsNavigationController = [[UIStoryboard storyboardWithName:@"SongSearchResults" bundle:nil] instantiateInitialViewController];
+    UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:searchResultsNavigationController];
     searchController.searchResultsUpdater = self;
     searchController.obscuresBackgroundDuringPresentation = false;
     searchController.searchBar.placeholder = @"Type to search";
+    self.definesPresentationContext = YES;
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = searchController;
+        songSearchResultsTableViewController *searchResultsVC = (songSearchResultsTableViewController *)searchResultsNavigationController.topViewController;
+        searchResultsVC.delegate = self;
     }
     else {
         // Fallback on earlier versions
@@ -35,7 +60,24 @@
     NSString *text = searchController.searchBar.text;
     if (!text) return;
     else {
-        NSLog(@"%@", text);
+        // filter the songs
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+            songModel *song = (songModel *)evaluatedObject;
+            NSLog(@"%@: song: %@ contains: %@", self.class, song, text);
+            return [song.songName containsString:text] || [song.singer containsString:text];
+        }];
+        NSArray *filteredSongs = [self.data filteredArrayUsingPredicate:predicate];
+        
+        // set the filtered songs of the song search results table view controller
+        if (@available(iOS 11.0, *)) {
+            UINavigationController *searchResultsNavigationController = (UINavigationController *)self.navigationItem.searchController.searchResultsController;
+            if (searchResultsNavigationController) {
+                songSearchResultsTableViewController *searchResultsVC = (songSearchResultsTableViewController *)searchResultsNavigationController.topViewController;
+                [searchResultsVC setFilteredSongs:filteredSongs];
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }
 
@@ -48,5 +90,12 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - songSearchResultsTableViewControllerDelegate
+- (void)selectSong:(songModel *)song from:(songSearchResultsTableViewController *)viewController {
+    PlayerViewController *playerVC = (PlayerViewController *)[self.tabBarController.viewControllers lastObject];
+    [playerVC prepareToPlay:song];
+    [playerVC play:nil];
+}
 
 @end
