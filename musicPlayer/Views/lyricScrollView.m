@@ -42,8 +42,8 @@
     [self setShowsHorizontalScrollIndicator:NO];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    // get lyric scroll view's frame position, and set the lyric table view at the correct position
-    CGRect lrcTableViewFrame = CGRectMake(screenBounds.size.width, -self.frame.origin.y, screenBounds.size.width, self.bounds.size.height);
+    // set the frame height to be 70% of the scroll view, otherwise the lyrics will not fully shown
+    CGRect lrcTableViewFrame = CGRectMake(screenBounds.size.width, 0, screenBounds.size.width, self.bounds.size.height * 0.7);
     UITableView *lyricTableView = [[UITableView alloc] initWithFrame:lrcTableViewFrame];
     
     [lyricTableView setDataSource:self];
