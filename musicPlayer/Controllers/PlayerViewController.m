@@ -443,7 +443,7 @@
     if ([[self.playerManager currentPlayer] rate] == 0) [[_songImageView layer] setSpeed:0.0];
 }
 
-// pause the song image view
+// pause the song image view based on CAMediaTiming formula t = (tp - begin) * speed + offset
 - (void)pauseSongImageViewAnimate {
     if (debug) NSLog(@"PlayerViewController:pause song imgView animate");
     CFTimeInterval timeOffset = [[_songImageView layer] convertTime:CACurrentMediaTime() fromLayer:nil];
@@ -451,7 +451,7 @@
     [[_songImageView layer] setTimeOffset:timeOffset];
 }
 
-// resume the song image view
+// resume the song image view based on CAMediaTiming formula t = (tp - begin) * speed + offset
 - (void)resumeSongImageViewAnimate {
     if (debug) NSLog(@"PlayerViewController:resume song imgView animate");
     
