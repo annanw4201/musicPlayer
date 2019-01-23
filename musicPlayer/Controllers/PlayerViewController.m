@@ -11,7 +11,7 @@
 #import "../musicManager/playerManager.h"
 #import "../Models/songModel.h"
 #import "../Models/lrcModel.h"
-#import "lyricScrollView.h"
+#import "../Views/lyricScrollView.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "../Tools/fileFetcher.h"
 #import "searchedLyricsViewController.h"
